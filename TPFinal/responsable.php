@@ -1,18 +1,16 @@
 <?php
 
-class Responsable
+class Responsable extends Persona
 {
     private $rnumeroempleado;
     private $rnumerolicencia;
-    private $rnombre;
-    private $rapellido;
 
-    public function __construct($rnumeroempleado, $rnumerolicencia, $rnombre, $rapellido)
+    public function __construct()
     {
-        $this->rnumeroempleado = $rnumeroempleado;
-        $this->rnumerolicencia = $rnumerolicencia;
-        $this->rnombre = $rnombre;
-        $this->rapellido = $rapellido;
+        parent::__construct();
+        $this->rnumeroempleado = "";
+        $this->rnumerolicencia = "";
+      
     }
 
     public function getRnumeroempleado()
@@ -35,23 +33,14 @@ class Responsable
         $this->rnumerolicencia = $value;
     }
 
-    public function getRnombre()
-    {
-        return $this->rnombre;
-    }
+   
 
-    public function setRnombre($value)
+    public function __toString()
     {
-        $this->rnombre = $value;
-    }
+        $msj = parent::__toString();
+        $msj .= "\nNúmero de Empleado: " . $this->getRnumeroempleado() . "\n";
+        $msj .= "Numero de Licencia: " . $this->getRnumerolicencia() . "\n";
 
-    public function getRapellido()
-    {
-        return $this->rapellido;
-    }
-
-    public function setRapellido($value)
-    {
-        $this->rapellido = $value;
+        return $msj;
     }
 }

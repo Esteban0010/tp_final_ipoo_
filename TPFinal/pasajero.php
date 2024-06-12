@@ -1,51 +1,18 @@
 <?php
 
-class Pasajero
+class Pasajero extends Persona
 {
-    private $pdocumento;
-    private $pnombre;
-    private $papellido;
+   
     private $ptelefono;
     private $idviaje;
 
-    public function __constructor($pdocumento, $pnombre, $papellido, $ptelefono, $idviaje)
+    public function __constructor()
     {
-        $this->pdocumento = $pdocumento;
-        $this->pnombre = $pnombre;
-        $this->papellido = $papellido;
-        $this->ptelefono = $ptelefono;
-        $this->idviaje = $idviaje;
+        parent::__construct();
+        $this->ptelefono = "";
+        $this->idviaje = "";
     }
 
-    public function getPdocumento()
-    {
-        return $this->pdocumento;
-    }
-
-    public function setPdocumento($value)
-    {
-        $this->pdocumento = $value;
-    }
-
-    public function getPnombre()
-    {
-        return $this->pnombre;
-    }
-
-    public function setPnombre($value)
-    {
-        $this->pnombre = $value;
-    }
-
-    public function getPapellido()
-    {
-        return $this->papellido;
-    }
-
-    public function setPapellido($value)
-    {
-        $this->papellido = $value;
-    }
 
     public function getPtelefono()
     {
@@ -66,4 +33,16 @@ class Pasajero
     {
         $this->idviaje = $value;
     }
+
+    public function __toString()
+    {
+        $msj = "\n»»»»««««\n";
+        $msj .= parent::__toString();
+        $msj .= "Telefono: " . $this->getPtelefono() . "\n";
+        $msj .= "id Viaje: " . $this->getIdviaje() . "\n";
+        return $msj;
+    }
+
+
+
 }
