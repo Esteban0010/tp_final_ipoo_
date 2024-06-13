@@ -1,28 +1,38 @@
 <?php
 
-class Pasajero extends Persona
+class ResponsableV extends Persona
 {
-   
-    
-    private $idviaje;
+    private $rnumeroempleado;
+    private $rnumerolicencia;
 
-    public function __constructor()
+    public function __construct()
     {
         parent::__construct();
-
-        $this->idviaje = "";
+        $this->rnumeroempleado = "";
+        $this->rnumerolicencia = "";
+      
     }
 
-
-    public function getIdviaje()
+    public function getRnumeroempleado()
     {
-        return $this->idviaje;
+        return $this->rnumeroempleado;
     }
 
-    public function setIdviaje($value)
+    public function setRnumeroempleado($value)
     {
-        $this->idviaje = $value;
+        $this->rnumeroempleado = $value;
     }
+
+    public function getRnumerolicencia()
+    {
+        return $this->rnumerolicencia;
+    }
+
+    public function setRnumerolicencia($value)
+    {
+        $this->rnumerolicencia = $value;
+    }
+
     public function setmensajeoperacion($mensajeoperacion){
 		$this->mensajeoperacion=$mensajeoperacion;
 	}
@@ -34,13 +44,14 @@ class Pasajero extends Persona
     public function Buscar($dni)
     {
         $base = new BaseDatos();
-        $consultaPersona = "SELECT * FROM pasajero WHERE pdocumento=" . $dni;
+        $consultaPersona = "SELECT * FROM responsable WHERE pdocumento=" . $dni;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaPersona)) {
                 if ($row2 = $base->Registro()) {
                    parent::Buscar($dni);
-                    $this->setIdviaje($row2['idviaje']);
+                    $this->setRnumeroempleado($row2['rnumeroempleado']);
+                    $this->setRnumerolicencia($row2['rnumerolicencia']);
                     $resp = true;
                 }
             } else {
@@ -57,16 +68,16 @@ class Pasajero extends Persona
     {
         $arrayPersona = null;
         $base = new BaseDatos();
-        $consultaPersonas = "SELECT * FROM pasajero ";
+        $consultaPersonas = "SELECT * FROM responsable ";
         if ($condicion != "") {
             $consultaPersonas = $consultaPersonas . ' WHERE ' . $condicion;
         }
-        $consultaPersonas .= " ORDER BY idviaje ";
+        $consultaPersonas .= " ORDER BY rnumeroempleado,rnumerolicencia ";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaPersonas)) {
                 $arrayPersona = array();
                 while ($row2 = $base->Registro()) {
-                    $obj = new Pasajero();
+                    $obj = new ResponsableV();
                     $obj->Buscar($row2["pdocumento"]);
                     array_push($arrayPersona, $obj);
                 }
@@ -83,8 +94,8 @@ class Pasajero extends Persona
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaInsertar = "INSERT INTO pasajero(pdocumento,idviaje) 
-				            VALUES (" . $this->getDoc() . ",'" . $this->getIdviaje()  . "')";
+        $consultaInsertar = "INSERT INTO reponsable(pdocumento,rnumeroempleado,rnumerolicencia) 
+				            VALUES (" . $this->getDoc() . ",'" . $this->getRnumeroempleado() . ",'" . $this->getRnumerolicencia() . "')";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
                 $resp =  true;
@@ -101,7 +112,7 @@ class Pasajero extends Persona
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE pasajero SET idviaje='" .$this->getIdviaje(). "' WHERE pdocumento=" . $this->getDoc();
+        $consultaModifica = "UPDATE pasajero SET rnumeroempleado='".$this->getRnumeroempleado() ."' rnumerolicencia=".$this->getRnumeroempleado().  "' WHERE pdocumento=" . $this->getDoc();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp =  true;
@@ -119,7 +130,7 @@ class Pasajero extends Persona
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = "DELETE FROM pasajero WHERE pdocumento=" . $this->getDoc();
+            $consultaBorra = "DELETE FROM responsable WHERE pdocumento=" . $this->getDoc();
             if ($base->Ejecutar($consultaBorra)) {
                 if(parent::eliminar()){
                     $resp=  true;
@@ -134,15 +145,14 @@ class Pasajero extends Persona
     }
 
 
+   
+
     public function __toString()
     {
-        $msj = "\n»»»»««««\n";
-        $msj .= parent::__toString();
-        $msj .= "Telefono: " . $this->getPtelefono() . "\n";
-        $msj .= "id Viaje: " . $this->getIdviaje() . "\n";
+        $msj = parent::__toString();
+        $msj .= "\nNúmero de Empleado: " . $this->getRnumeroempleado() . "\n";
+        $msj .= "Numero de Licencia: " . $this->getRnumerolicencia() . "\n";
+
         return $msj;
     }
-
-
-
 }
