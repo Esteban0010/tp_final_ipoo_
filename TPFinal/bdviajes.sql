@@ -42,10 +42,10 @@ CREATE TABLE viaje (
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 1;
 	
 CREATE TABLE pasajero (
-    pdocumento varchar(15),
+    pdocumento int(15),
     pnombre varchar(150), 
     papellido varchar(150), 
-	ptelefono int(20), 
+	ptelefono int, 
 	idviaje bigint,
     PRIMARY KEY (pdocumento),
     FOREIGN KEY (pdocumento) REFERENCES persona (documento)

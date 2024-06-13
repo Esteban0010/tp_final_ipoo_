@@ -13,6 +13,12 @@ class Pasajero extends Persona
         $this->idviaje = "";
     }
 
+    public function cargar($doc, $nombre, $apellido, $telefono, $idviaje=null)
+    {
+        parent::cargar($doc, $nombre, $apellido, $telefono);
+        $this->setIdviaje($idviaje);
+    }
+
 
     public function getIdviaje()
     {

@@ -3,7 +3,7 @@
 class ResponsableV extends Persona
 {
     private $rnumeroempleado;
-    private $mensajeoperacion;
+
     private $rnumerolicencia;
 
     public function __construct()
@@ -12,6 +12,13 @@ class ResponsableV extends Persona
         $this->rnumeroempleado = "";
         $this->rnumerolicencia = "";
       
+    }
+
+    public function cargar($doc, $nombre, $apellido, $telefono, $rnumeroempleado =null,$rnumerolicencia=null)
+    {
+        parent::cargar($doc, $nombre, $apellido, $telefono);
+        $this->setRnumeroempleado($rnumeroempleado);// ********************
+        $this->setRnumerolicencia($rnumerolicencia);
     }
 
     public function getRnumeroempleado()
