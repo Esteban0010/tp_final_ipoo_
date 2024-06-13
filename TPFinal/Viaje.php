@@ -166,7 +166,7 @@ class Viaje
     {
         $arregloviaje = null;
         $base = new BaseDatos();
-        $consultaviajes = "Select * from viaje ";
+        $consultaviajes = "SELECT * FROM viaje ";
         if ($condicion != "") {
             $consultaviajes = $consultaviajes . ' where ' . $condicion;
         }
