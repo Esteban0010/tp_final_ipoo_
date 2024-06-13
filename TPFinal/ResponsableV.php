@@ -3,6 +3,7 @@
 class ResponsableV extends Persona
 {
     private $rnumeroempleado;
+    private $mensajeoperacion;
     private $rnumerolicencia;
 
     public function __construct()

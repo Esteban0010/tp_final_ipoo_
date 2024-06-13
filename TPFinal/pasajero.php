@@ -5,7 +5,7 @@ class Pasajero extends Persona
    
     
     private $idviaje;
-
+    private $mensajeoperacion;
     public function __constructor()
     {
         parent::__construct();
@@ -40,7 +40,7 @@ class Pasajero extends Persona
             if ($base->Ejecutar($consultaPersona)) {
                 if ($row2 = $base->Registro()) {
                    parent::Buscar($dni);
-                    $this->setIdviaje($row2['idviaje']);
+                    $this->setIdviaje($row2['idviaje']);//posble boolean
                     $resp = true;
                 }
             } else {
@@ -138,7 +138,6 @@ class Pasajero extends Persona
     {
         $msj = "\n»»»»««««\n";
         $msj .= parent::__toString();
-        $msj .= "Telefono: " . $this->getPtelefono() . "\n";
         $msj .= "id Viaje: " . $this->getIdviaje() . "\n";
         return $msj;
     }
