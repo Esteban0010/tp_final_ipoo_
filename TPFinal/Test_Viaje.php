@@ -29,17 +29,17 @@ while (true) {
 
 
             $nroDocResponsableV = readline("Ingrese el numero de documento empleado del responsable del nuevo viaje: ");
-            $telefonoResponsableV = readline("Ingrese el telefono del responsable del nuevo viaje: ");
             $numEmpleado = readline("Ingrese el numero de empleado del responsable del nuevo viaje: ");
             $numLicencia = readline("Ingrese el numero de licencia del responsable del nuevo viaje: ");
             $nombreResponsableV = readline("Ingrese el Nombre del responsable del nuevo viaje: ");
             $apellidoResponsableV  = readline("Ingrese el apellido del responsable del nuevo viaje: ");
             $personaResponsableV= new Persona();
             $personaResponsableV->insertar();
-            $personaResponsableV->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $telefonoResponsableV);
+            $personaResponsableV->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV);
             $nuevoResponsable = new ResponsableV();
-            $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $telefonoResponsableV, $numEmpleado, $numLicencia);
+            $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
             $nuevoResponsable->insertar();
+            print_r($nuevoResponsable);
 
             $codigo = readline("Ingrese el codigo del nuevo viaje: ");
             $destino = readline("Ingrese el destino del nuevo viaje: ");

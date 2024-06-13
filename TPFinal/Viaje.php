@@ -219,7 +219,7 @@ class Viaje
         $resp = false;
         $base = new BaseDatos();
         $consultaModifica = "UPDATE viaje SET vdestino='" . $this->getCodIdviaje() . "',idempresa='" . $this->getObjEmpresa()->getIdempresa() . "'
-                           ,rnumeroempleado='" . $this->getObjResponsableDocumento()->getNumeroEmpleado() . "' WHERE idviaje=" . $this->getCodIdviaje();
+                           ,rnumeroempleado='" . $this->getObjResponsableV()->getNumeroEmpleado() . "' WHERE idviaje=" . $this->getCodIdviaje();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp =  true;

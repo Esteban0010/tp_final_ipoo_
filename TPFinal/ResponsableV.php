@@ -11,12 +11,12 @@ class ResponsableV extends Persona
         parent::__construct();
         $this->rnumeroempleado = "";
         $this->rnumerolicencia = "";
-      
+
     }
 
-    public function cargar($doc, $nombre, $apellido, $telefono, $rnumeroempleado =null,$rnumerolicencia=null)
+    public function cargar($doc, $nombre, $apellido,  $rnumeroempleado = null, $rnumerolicencia = null)
     {
-        parent::cargar($doc, $nombre, $apellido, $telefono);
+        parent::cargar($doc, $nombre, $apellido);
         $this->setRnumeroempleado($rnumeroempleado);// ********************
         $this->setRnumerolicencia($rnumerolicencia);
     }
@@ -41,23 +41,25 @@ class ResponsableV extends Persona
         $this->rnumerolicencia = $value;
     }
 
-    public function setmensajeoperacion($mensajeoperacion){
-		$this->mensajeoperacion=$mensajeoperacion;
-	}
+    public function setmensajeoperacion($mensajeoperacion)
+    {
+        $this->mensajeoperacion = $mensajeoperacion;
+    }
 
-    public function getmensajeoperacion(){
-		return $this->mensajeoperacion ;
-	}
+    public function getmensajeoperacion()
+    {
+        return $this->mensajeoperacion;
+    }
 
     public function Buscar($dni)
     {
         $base = new BaseDatos();
-        $consultaPersona = "SELECT * FROM responsable WHERE pdocumento=" . $dni;
+        $consultaPersona = "SELECT * FROM responsable WHERE rdocumento=" . $dni;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaPersona)) {
                 if ($row2 = $base->Registro()) {
-                   parent::Buscar($dni);
+                    parent::Buscar($dni);
                     $this->setRnumeroempleado($row2['rnumeroempleado']);
                     $this->setRnumerolicencia($row2['rnumerolicencia']);
                     $resp = true;
@@ -86,7 +88,7 @@ class ResponsableV extends Persona
                 $arrayPersona = array();
                 while ($row2 = $base->Registro()) {
                     $obj = new ResponsableV();
-                    $obj->Buscar($row2["pdocumento"]);
+                    $obj->Buscar($row2["rdocumento"]);
                     array_push($arrayPersona, $obj);
                 }
             } else {
@@ -102,17 +104,21 @@ class ResponsableV extends Persona
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaInsertar = "INSERT INTO reponsable(pdocumento,rnumeroempleado,rnumerolicencia) 
-				            VALUES (" . $this->getDoc() . ",'" . $this->getRnumeroempleado() . ",'" . $this->getRnumerolicencia() . "')";
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                $resp =  true;
+        if (parent::insertar()) {
+            $consultaInsertar = "INSERT INTO responsable(rdocumento,rnumeroempleado,rnumerolicencia) 
+            VALUES (" . $this->getDoc() . ", '" . $this->getRnumeroempleado() . "', '" . $this->getRnumerolicencia() . "')";
+            
+            if ($base->Iniciar()) {
+                if ($base->Ejecutar($consultaInsertar)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
-        } else {
-            $this->setmensajeoperacion($base->getError());
         }
+
         return $resp;
     }
 
@@ -120,10 +126,10 @@ class ResponsableV extends Persona
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE pasajero SET rnumeroempleado='".$this->getRnumeroempleado() ."' rnumerolicencia=".$this->getRnumeroempleado().  "' WHERE pdocumento=" . $this->getDoc();
+        $consultaModifica = "UPDATE responsable SET rnumeroempleado='" . $this->getRnumeroempleado() . "' rnumerolicencia=" . $this->getRnumeroempleado() . "' WHERE rdocumento=" . $this->getDoc();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
-                $resp =  true;
+                $resp = true;
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -138,10 +144,10 @@ class ResponsableV extends Persona
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = "DELETE FROM responsable WHERE pdocumento=" . $this->getDoc();
+            $consultaBorra = "DELETE FROM responsable WHERE rdocumento=" . $this->getDoc();
             if ($base->Ejecutar($consultaBorra)) {
-                if(parent::eliminar()){
-                    $resp=  true;
+                if (parent::eliminar()) {
+                    $resp = true;
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -153,7 +159,7 @@ class ResponsableV extends Persona
     }
 
 
-   
+
 
     public function __toString()
     {

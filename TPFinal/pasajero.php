@@ -5,6 +5,7 @@ class Pasajero extends Persona
    
     
     private $idviaje;
+
     private $mensajeoperacion;
     public function __constructor()
     {
@@ -13,9 +14,9 @@ class Pasajero extends Persona
         $this->idviaje = "";
     }
 
-    public function cargar($doc, $nombre, $apellido, $telefono, $idviaje=null)
+    public function cargar($doc, $nombre, $apellido, $idviaje=null)
     {
-        parent::cargar($doc, $nombre, $apellido, $telefono);
+        parent::cargar($doc, $nombre, $apellido);
         $this->setIdviaje($idviaje);
     }
 
