@@ -189,9 +189,7 @@ while (true) {
             if ($viaje->Buscar($idViaje)) {
                 $viaje->getColPasajerosBD($idViaje);
                 $cantPasajeros = count($viaje->getColObjPasajeros());
-                echo $cantPasajeros.'cant';
                 $capMax = $viaje->getVcantmaxpasajeros();
-                echo $capMax.'capMax';
                 if ($capMax > $cantPasajeros) {
                     $nombre = readline('Nombre del pasajero: ');
                     $apellido = readline('Apellido del pasajero: ');
