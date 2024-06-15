@@ -13,7 +13,6 @@ class Viaje
 
     public function __construct()
     {
-        /* SE ponen los autoincrement */
         $this->idCodviaje = '';
         $this->vdestino = '';
         $this->vcantmaxpasajeros = '';
@@ -246,7 +245,7 @@ class Viaje
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = 'INSERT INTO viaje(idviaje, vdestino, vcantmaxpasajeros,  idempresa, rdocumento, vimporte) 
-				VALUES ('.$this->getCodIdviaje().",'".$this->getVdestino()."','".$this->getVcantmaxpasajeros()."','".$this->getObjEmpresa()->getIdempresa() /* no será getIdempresa? */."','".$this->getObjResponsableV()->getDoc()."','".$this->getVimporte()."')";
+				VALUES ('.$this->getCodIdviaje().",'".$this->getVdestino()."','".$this->getVcantmaxpasajeros()."','".$this->getObjEmpresa() /* no será getIdempresa? */."','".$this->getObjResponsableV()."','".$this->getVimporte()."')";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
