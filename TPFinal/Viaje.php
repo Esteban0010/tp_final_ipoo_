@@ -238,8 +238,8 @@ class Viaje
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE viaje SET vdestino='".$this->getCodIdviaje()."',idempresa='".$this->getObjEmpresa()->getIdempresa()."'
-                           ,rnumeroempleado='".$this->getObjResponsableV()->getNumeroEmpleado()."' WHERE idviaje=".$this->getCodIdviaje();
+        $consultaModifica = "UPDATE viaje SET vdestino='".$this->getCodIdviaje()."',idempresa='".$this->getObjEmpresa()."'
+                           ,rnumeroempleado='".$this->getObjResponsableV()."' WHERE idviaje=".$this->getCodIdviaje();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -255,12 +255,12 @@ class Viaje
 
     public function __toString()
     {
-        $msj = 'ID VIAJE: '.$this->getCodIdviaje()."\n";
-        $msj .= 'Destino: '.$this->getVdestino()."\n";
-        $msj .= 'Cantidad Maxima Pasajeros: '.$this->getVcantmaxpasajeros()."\n";
-        $msj .= 'ID EMPRESA: '.$this->getObjEmpresa()->getIdempresa()."\n";
-        $msj .= 'Numero Empleado: '.$this->getObjResponsableV()->getRnumeroempleado()."\n";
-        $msj .= 'DNI responsable: '.$this->getObjResponsableV()->getObjResponsableDocumento()."\n";
+        $msj = 'ID VIAJE: '.$this->getCodIdviaje() . "\n";
+        $msj .= 'Destino: '.$this->getVdestino() . "\n";
+        $msj .= 'Cantidad Maxima Pasajeros: '.$this->getVcantmaxpasajeros() . "\n";
+        $msj .= 'ID EMPRESA: '.$this->getObjEmpresa() . "\n";
+        $msj .= 'Numero Empleado: '.$this->getObjResponsableV() . "\n";
+        $msj .= 'DNI responsable: '.$this->getObjResponsableV() . "\n";
         $msj .= 'Importe del Viaje: '.$this->getVimporte()."\n";
 
         return $msj;
