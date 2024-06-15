@@ -219,7 +219,7 @@ class Viaje
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = 'INSERT INTO viaje(idviaje, vdestino, vcantmaxpasajeros,  idempresa, rdocumento, vimporte) 
-				VALUES ('.$this->getCodIdviaje().",'".$this->getVdestino()."','".$this->getVcantmaxpasajeros()."','".$this->getObjEmpresa() /* no será getIdempresa? */."','".$this->getObjResponsableV()."','".$this->getVimporte()."')";
+				VALUES ('.$this->getCodIdviaje().",'".$this->getVdestino()."','".$this->getVcantmaxpasajeros()."','".$this->getObjEmpresa() . "','".$this->getObjResponsableV()."','".$this->getVimporte()."')";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
@@ -238,8 +238,7 @@ class Viaje
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE viaje SET vdestino='".$this->getCodIdviaje()."',idempresa='".$this->getObjEmpresa()."'
-                           ,rnumeroempleado='".$this->getObjResponsableV()."' WHERE idviaje=".$this->getCodIdviaje();
+        $consultaModifica = "UPDATE viaje SET vdestino='rnumeroempleado='".$this->getObjResponsableV() . "',vdestino='" . $this->getVdestino() . "'WHERE idviaje=".$this->getCodIdviaje() . "')"; 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -253,6 +252,21 @@ class Viaje
         return $resp;
     }
 
+    // para mostrar todos los viajes
+    public function mostrarViaje($idViaje)
+    {
+        $viajes = $this->listar("idviaje = " . $idViaje);
+        if ($viajes != null) {
+            $resultado = "";
+            foreach ($viajes as $viaje) {
+                $resultado .= $viaje->__toString() . "\n"; // acceder toString para retornar valor ensrguida
+            }
+        } else {
+            $resultado = "Sin viajes";
+        }
+        return $resultado;
+    }
+
     public function __toString()
     {
         $msj = 'ID VIAJE: '.$this->getCodIdviaje() . "\n";
@@ -262,7 +276,6 @@ class Viaje
         $msj .= 'Numero Empleado: '.$this->getObjResponsableV() . "\n";
         $msj .= 'DNI responsable: '.$this->getObjResponsableV() . "\n";
         $msj .= 'Importe del Viaje: '.$this->getVimporte()."\n";
-
         return $msj;
     }
 }

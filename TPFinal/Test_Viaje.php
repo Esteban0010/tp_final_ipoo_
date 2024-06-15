@@ -110,11 +110,13 @@ while (true) {
             //     }
             // }
             // break;
-        case '3':
-            // echo "Ingrese el id del viaje\n";
-            // $id = trim(fgets(STDIN));
-            // $viaje->listar($id);
-            // break;
+            case '3':
+                echo "Ingrese el id del viaje\n";
+                $id = trim(fgets(STDIN));
+                $viaje = new Viaje();
+                $resultado = $viaje->mostrarViaje($id);
+                echo $resultado;
+                break;
 
         case '4':
             $numDocPasajero = readline("Ingrese el número de documento del pasajero al que desea cambiarle los datos:\n");

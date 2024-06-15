@@ -9,7 +9,6 @@ class Pasajero extends Persona
     public function __construct()
     {
         parent::__construct();
-
         $this->idviaje = '';
         $this->telefono = '';
     }
