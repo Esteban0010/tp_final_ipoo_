@@ -13,7 +13,6 @@ class Viaje
 
     public function __construct()
     {
-        /* SE ponen los autoincrement */
         $this->idCodviaje = '';
         $this->vdestino = '';
         $this->vcantmaxpasajeros = '';
@@ -182,29 +181,6 @@ class Viaje
 
         return $resp;
     }
-    // 	public function Buscar($dni)
-    // 	{
-    // 		$base = new BaseDatos();
-    // 		$consultaPersona = "Select * from persona where nrodoc=" . $dni;
-    // 		$resp = false;
-    // 		if ($base->Iniciar()) {
-    // 			if ($base->Ejecutar($consultaPersona)) {
-    // 				if ($row2 = $base->Registro()) {
-    // 					$this->setIdPersona($row2['idpersona']);
-    // 					$this->setNrodoc($dni);
-    // 					$this->setNombre($row2['nombre']);
-    // 					$this->setApellido($row2['apellido']);
-    // 					$this->setEmail($row2['email']);
-    // 					$resp = true;
-    // 				}
-    // 			} else {
-    // 				$this->setmensajeoperacion($base->getError());
-    // 			}
-    // 		} else {
-    // 			$this->setmensajeoperacion($base->getError());
-    // 		}
-    // 		return $resp;
-    // 	}
 
     public function listar($condicion = '')
     {
@@ -215,7 +191,6 @@ class Viaje
             $consultaviajes = $consultaviajes.' where '.$condicion;
         }
         $consultaviajes .= ' order by vdestino ';
-        // echo $consultaviajes;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaviajes)) {
                 $arregloviaje = [];
