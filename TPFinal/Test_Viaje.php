@@ -18,7 +18,6 @@ while (true) {
 
     switch ($opcion) {
         case '1':
-            
 
             $idEmpresa = readline("Ingrese el id de la empresa: ");
             $nombreEmpresa = readline("Ingrese el nombre de la empresa: ");
