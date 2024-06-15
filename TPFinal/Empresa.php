@@ -71,9 +71,9 @@ class Empresa
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaViaje)) {
 				if ($row2 = $base->Registro()) {
-					$this->getIdempresa($idempresa);
-					$this->getEnombre($row2['enombre']);
-					$this->getEdireccion($row2['edireccion']);
+					$this->setIdempresa($idempresa);
+					$this->setEnombre($row2['enombre']);
+					$this->setEdireccion($row2['edireccion']);
 					$resp = true;
 				}
 			} else {
@@ -137,7 +137,7 @@ class Empresa
 		$resp = false;
 		$base = new BaseDatos();
 		$consultaModifica = "UPDATE empresa
-                            SET enombre='" . $this->getEnombre() . "',edireccion='" . $this->getEdireccion() . "' WHERE idempresa=" . $this->getIdempresa();
+                            SET enombre='" . $this->getEnombre() . "',edireccion='" . $this->getEdireccion() . "' WHERE idempresa=" .  $this->getIdempresa();
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaModifica)) {
 				$resp =  true;

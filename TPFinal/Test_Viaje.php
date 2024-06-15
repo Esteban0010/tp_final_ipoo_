@@ -99,7 +99,7 @@ while (true) {
                             $nuevoNumEmpleado = trim(fgets(STDIN));
                             $responsableV->setRnumeroempleado($nuevoNumEmpleado);
                             $responsableV->modificar();
-                            echo "Se cambió correctamente a " . $responsableV->getRnumerolicencia() . "🟢 \n";
+                            echo "Se cambió correctamente a " . $responsableV->getRnumeroempleado() . "🟢 \n";
                             break;
                         case 2:
                             echo $responsableV->getRnumerolicencia() . " es el numero de licencia del responsable \n";
@@ -134,8 +134,7 @@ while (true) {
                             $nuevoNumEmpleado = trim(fgets(STDIN));
                             $responsableV->setRnumeroempleado($nuevoNumEmpleado);
                             $responsableV->modificar();
-                            echo "Se cambió correctamente a " . $responsableV->getRnumerolicencia() . "🟢\n";
-                            break;
+                            echo "Se cambió correctamente a " . $responsableV->getRnumeroempleado() . "🟢\n";
 
                             echo $responsableV->getRnumerolicencia() . " es el numero de licencia del responsable \n";
                             echo "Se cambiará a: \n";
@@ -143,16 +142,13 @@ while (true) {
                             $responsableV->setRnumerolicencia($nuevoNumLicencia);
                             $responsableV->modificar();
                             echo "Se cambió correctamente a " . $responsableV->getRnumerolicencia() . "🟢\n";
-                            break;
 
-                            echo $persona->getNombre() . "es el nombre del responsable \n";
+                            echo $persona->getNombre() . " es el nombre del responsable \n";
                             echo "Se cambiará a: \n";
                             $nuevoNombre = trim(fgets(STDIN));
                             $persona->setNombre($nuevoNombre);
                             $persona->modificar();
                             echo "Se cambió correctamente a " . $persona->getNombre() . "🟢\n";
-                            break;
-
 
                             echo $persona->getApellido() . " es el apellido de empleado \n";
                             echo "Se cambiará a: \n";
@@ -171,6 +167,7 @@ while (true) {
                     echo "Este es el Costo actual del viaje: " . $viaje->getVimporte() . "\n";
                     $viaje->setVimporte(readline("Ingrese el nuevo costo del viaje: "));
                     $viaje->modificar();
+                    echo "Se cambió correctamente a " .  $viaje->getVimporte() . "🟢\n";
                     break;
                 case '5':
                     $idEmpresa = readline("Ingrese el ID EMPRESA: ");
@@ -197,7 +194,7 @@ while (true) {
                             $nuevaDire = trim(fgets(STDIN));
                             $empresa->setEdireccion($nuevaDire);
                             $empresa->modificar();
-                            echo "La dirección de la empresa se cambió correctamente\n";
+                            echo "La dirección de la empresa se cambió correctamente 🟢\n";
                             break;
                         case 3:
 
@@ -206,13 +203,13 @@ while (true) {
                             $nuevoNombre = trim(fgets(STDIN));
                             $empresa->setEnombre($nuevoNombre);
                             $empresa->modificar();
-                            echo "El nombre de la empresa se cambió correctamente\n";
+                            echo "El nombre de la empresa se cambió correctamente 🟢\n";
 
                             echo "La dirección actual de la empresa es " . $empresa->getEdireccion() . "\n";
                             echo "Se cambiará a :\n";
                             $nuevaDire = trim(fgets(STDIN));
                             $empresa->setEdireccion($nuevaDire);
-                            echo "La dirección de la empresa se cambió correctamente\n";
+                            echo "La dirección de la empresa se cambió correctamente 🟢\n";
                             $empresa->modificar();
                             break;
                     }
