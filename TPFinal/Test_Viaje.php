@@ -187,6 +187,7 @@ while (true) {
             $idViaje = trim(fgets(STDIN));
             $viaje = new Viaje();
             if ($viaje->Buscar($idViaje)) {
+                $viaje->getColPasajerosBD($idViaje);
                 $cantPasajeros = count($viaje->getColObjPasajeros());
                 echo $cantPasajeros.'cant';
                 $capMax = $viaje->getVcantmaxpasajeros();

@@ -112,26 +112,24 @@ class Viaje
         $this->mensajeoperacion = $mensajeoperacion;
     }
 
-    public function setColPasajeros($id)
+    public function getColPasajerosBD($id)
     {
         $base = new BaseDatos();
-        $consultaviaje = 'SELECT * FROM pasajero AS p  JOIN persona AS per  ON p.pdocumento = per.documento WHERE idviaje='.$id;
+        $consultaviaje = 'SELECT * FROM pasajero AS p  INNER JOIN persona AS per  ON p.pdocumento = per.documento WHERE idviaje='.$id;
         $resp = false;
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaviaje)) {
                 $pasajeros = [];
-                while ($row = $base->Registro()) {
-                    while ($row = $base->Registro()) {
-                        $pasajero = new Pasajero();
-                        $doc = $row['documento'];
-                        $nombre = $row['nombre'];
-                        $apellido = $row['apellido'];
-                        $telefono = $row['ptelefono'];
-                        $pasajero->cargar($doc, $nombre, $apellido, $id, $telefono);
+                while ($row2 = $base->Registro()) {
+                    $pasajero = new Pasajero();
+                    $doc = $row2['documento'];
+                    $nombre = $row2['nombre'];
+                    $apellido = $row2['apellido'];
+                    $telefono = $row2['ptelefono'];
+                    $pasajero->cargar($doc, $nombre, $apellido, $id, $telefono);
 
-                        $pasajeros[] = $pasajero;
-                    }
+                    $pasajeros[] = $pasajero;
                 }
                 $this->setColObjPasajeros($pasajeros);
                 $resp = true;
@@ -142,7 +140,7 @@ class Viaje
             $this->setmensajeoperacion($base->getError());
         }
 
-        return $pasajeros;
+        return $resp;
     }
 
     /**
