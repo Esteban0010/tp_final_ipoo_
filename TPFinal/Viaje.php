@@ -115,7 +115,7 @@ class Viaje
     public function getColPasajerosBD($id)
     {
         $base = new BaseDatos();
-        $consultaviaje = 'SELECT * FROM pasajero AS p  INNER JOIN persona AS per  ON p.pdocumento = per.documento WHERE idviaje='.$id;
+        $consultaviaje = 'SELECT * FROM pasajero AS p  INNER JOIN persona AS per  ON p.pdocumento = per.documento WHERE idviaje=' . $id;
         $resp = false;
 
         if ($base->Iniciar()) {
@@ -153,7 +153,7 @@ class Viaje
     public function Buscar($id)
     {
         $base = new BaseDatos();
-        $consultaviaje = 'SELECT * FROM viaje WHERE idviaje='.$id;
+        $consultaviaje = 'SELECT * FROM viaje WHERE idviaje=' . $id;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaviaje)) {
@@ -186,7 +186,7 @@ class Viaje
         $base = new BaseDatos();
         $consultaviajes = 'SELECT * FROM viaje ';
         if ($condicion != '') {
-            $consultaviajes = $consultaviajes.' where '.$condicion;
+            $consultaviajes = $consultaviajes . ' where ' . $condicion;
         }
         $consultaviajes .= ' order by vdestino ';
         if ($base->Iniciar()) {
@@ -219,7 +219,7 @@ class Viaje
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = 'INSERT INTO viaje(idviaje, vdestino, vcantmaxpasajeros,  idempresa, rdocumento, vimporte) 
-				VALUES ('.$this->getCodIdviaje().",'".$this->getVdestino()."','".$this->getVcantmaxpasajeros()."','".$this->getObjEmpresa() . "','".$this->getObjResponsableV()."','".$this->getVimporte()."')";
+				VALUES (' . $this->getCodIdviaje() . ",'" . $this->getVdestino() . "','" . $this->getVcantmaxpasajeros() . "','" . $this->getObjEmpresa() . "','" . $this->getObjResponsableV() . "','" . $this->getVimporte() . "')";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
@@ -238,7 +238,10 @@ class Viaje
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE viaje SET vdestino='rnumeroempleado='".$this->getObjResponsableV() . "',vdestino='" . $this->getVdestino() . "'WHERE idviaje=".$this->getCodIdviaje() . "')"; 
+        $consultaModifica = "UPDATE viaje 
+                         SET rnumeroempleado='" . $this->getObjResponsableV() . "', 
+                             vdestino='" . $this->getVdestino() . "' 
+                         WHERE idviaje=" . $this->getCodIdviaje();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -269,13 +272,13 @@ class Viaje
 
     public function __toString()
     {
-        $msj = 'ID VIAJE: '.$this->getCodIdviaje() . "\n";
-        $msj .= 'Destino: '.$this->getVdestino() . "\n";
-        $msj .= 'Cantidad Maxima Pasajeros: '.$this->getVcantmaxpasajeros() . "\n";
-        $msj .= 'ID EMPRESA: '.$this->getObjEmpresa() . "\n";
-        $msj .= 'Numero Empleado: '.$this->getObjResponsableV() . "\n";
-        $msj .= 'DNI responsable: '.$this->getObjResponsableV() . "\n";
-        $msj .= 'Importe del Viaje: '.$this->getVimporte()."\n";
+        $msj = 'ID VIAJE: ' . $this->getCodIdviaje() . "\n";
+        $msj .= 'Destino: ' . $this->getVdestino() . "\n";
+        $msj .= 'Cantidad Maxima Pasajeros: ' . $this->getVcantmaxpasajeros() . "\n";
+        $msj .= 'ID EMPRESA: ' . $this->getObjEmpresa() . "\n";
+        $msj .= 'Numero Empleado: ' . $this->getObjResponsableV() . "\n";
+        $msj .= 'DNI responsable: ' . $this->getObjResponsableV() . "\n";
+        $msj .= 'Importe del Viaje: ' . $this->getVimporte() . "\n";
         return $msj;
     }
 }

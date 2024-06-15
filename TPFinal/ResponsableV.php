@@ -11,13 +11,12 @@ class ResponsableV extends Persona
         parent::__construct();
         $this->rnumeroempleado = "";
         $this->rnumerolicencia = "";
-
     }
 
     public function cargar($doc, $nombre, $apellido,  $rnumeroempleado = null, $rnumerolicencia = null)
     {
         parent::cargar($doc, $nombre, $apellido);
-        $this->setRnumeroempleado($rnumeroempleado);// ********************
+        $this->setRnumeroempleado($rnumeroempleado); // ********************
         $this->setRnumerolicencia($rnumerolicencia);
     }
 
@@ -97,7 +96,7 @@ class ResponsableV extends Persona
         if (parent::insertar()) {
             $consultaInsertar = "INSERT INTO responsable(rdocumento,rnumeroempleado,rnumerolicencia) 
             VALUES (" . $this->getDoc() . ", '" . $this->getRnumeroempleado() . "', '" . $this->getRnumerolicencia() . "')";
-            
+
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consultaInsertar)) {
                     $resp = true;
@@ -116,7 +115,10 @@ class ResponsableV extends Persona
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE responsable SET rnumeroempleado='" . $this->getRnumeroempleado() . "' rnumerolicencia=" . $this->getRnumeroempleado() . "' WHERE rdocumento=" . $this->getDoc();
+        $consultaModifica = "UPDATE responsable 
+                    SET rnumeroempleado='" . $this->getRnumeroempleado() . "', 
+                        rnumerolicencia='" . $this->getRnumerolicencia() . "' 
+                    WHERE rdocumento='" . $this->getDoc() . "'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
