@@ -41,16 +41,6 @@ class ResponsableV extends Persona
         $this->rnumerolicencia = $value;
     }
 
-    public function setmensajeoperacion($mensajeoperacion)
-    {
-        $this->mensajeoperacion = $mensajeoperacion;
-    }
-
-    public function getmensajeoperacion()
-    {
-        return $this->mensajeoperacion;
-    }
-
     public function Buscar($dni)
     {
         $base = new BaseDatos();

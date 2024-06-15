@@ -6,7 +6,7 @@ class Pasajero extends Persona
     private $telefono;
     private $mensajeoperacion;
 
-    public function __constructor()
+    public function __construct()
     {
         parent::__construct();
 
