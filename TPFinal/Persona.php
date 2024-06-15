@@ -13,7 +13,6 @@ class Persona
         $this->documento = "";
         $this->nombre = "";
         $this->apellido = "";
-        $this->telefono = "";
     }
 
     public function cargar($doc, $nombre, $apellido)
