@@ -20,7 +20,6 @@ while (true) {
     echo "7) Eliminar datos\n";
     echo "8) Salir\n"; // terminar
     $opcion = readline('Ingrese la opción deseada: ');
-
     switch ($opcion) {
         case '1':
             echo "Primero corroboremos que la empresa no exista\n";
@@ -36,6 +35,7 @@ while (true) {
                 $empresa->cargar(null, $nombreEmpresa, $direccionEmpresa);
                 if ($empresa->insertar()) {
                     echo "Empresa creada con éxito.\n";
+                    echo $empresa->getIdempresa();
                 } else {
                     echo "Ocurrió un error:" . $empresa->getmensajeoperacion() . "\n";
                 }
@@ -86,7 +86,6 @@ while (true) {
                     echo "Error en la respuesta, verifique que esté dentro del rango.\n";
                 }
             }
-
             echo "Ahora sí, puede crear un viaje.\n";
             echo "Asigne el viaje a una empresa:\n";
             $idEMpresa = readline("Ingrese el ID de la empresa: ");
@@ -99,6 +98,7 @@ while (true) {
                 $viaje->cargar(null, $destino, $maxPasajeros, $empresa, $nuevoResponsable, $costoDelViaje);
                 if ($viaje->insertar()) {
                     echo "Viaje creado exitosamente.\n";
+                    echo "id viaje:". $viaje->getCodIdviaje();
                 } else {
                     echo "Ocurrió un error: " . $viaje->getmensajeoperacion();
                 }

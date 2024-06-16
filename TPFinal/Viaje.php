@@ -224,6 +224,8 @@ class Viaje
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
+                $id=$base->lastInsertId();
+                $this->setCodIdviaje($id);
                 $resp = true;
             } else {
                 $this->setmensajeoperacion($base->getError());

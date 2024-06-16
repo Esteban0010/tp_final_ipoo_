@@ -121,6 +121,8 @@ class Empresa
 		$consultaInsertar = $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getEnombre() . "','" . $this->getEdireccion() . "')";
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {
+				$id=$base->lastInsertId();
+                $this->setIdempresa($id);
 				$resp =  true;
 			} else {
 				$this->setmensajeoperacion($base->getError());
