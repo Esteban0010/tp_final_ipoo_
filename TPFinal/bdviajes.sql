@@ -13,8 +13,8 @@ CREATE TABLE persona (
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE responsable (
-    rnumeroempleado bigint,
-    rnumerolicencia bigint,
+    rnumeroempleado bigint UNIQUE,
+    rnumerolicencia bigint UNIQUE,
     rdocumento int(15), 
     PRIMARY KEY (rdocumento),
     FOREIGN KEY (rdocumento) REFERENCES persona (documento)
