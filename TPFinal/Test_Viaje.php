@@ -9,13 +9,13 @@ include_once 'db.php';
 
 while (true) {
     echo "\nMenú:\n";
-    echo "1. Cargar informacion del viaje\n";
-    echo "2. Modificar informacion del viaje\n";
-    echo "3. Ver datos del viaje\n";
-    echo "4. Modificar Pasajero\n";
-    echo "5. Agregar Pasajero\n";
-    echo "6. Eliminar datos\n";
-    echo "7. Salir\n";
+    echo "1) Cargar informacion del viaje\n";
+    echo "2) Modificar informacion del viaje\n";
+    echo "3) Ver datos del viaje\n";
+    echo "4) Modificar pasajero\n";
+    echo "5) Agregar pasajero\n";
+    echo "6) Eliminar datos\n";
+    echo "7) Salir\n";
     $opcion = readline('Ingrese la opción deseada: ');
 
     switch ($opcion) {
@@ -23,7 +23,7 @@ while (true) {
             $idEmpresa = readline('Ingrese el id de la empresa: ');
             $empresa = new Empresa();
             if ($empresa->Buscar($idEmpresa)) {
-                echo 'Ah ingresado el id de una empresa ya existente.';
+                echo 'El id ingresado ya pertenece a una empresa.';
             } else {
                 $nombreEmpresa = readline('Ingrese el nombre de la empresa: ');
                 $direccionEmpresa = readline('Ingrese la dirección de la empresa: ');
@@ -34,7 +34,7 @@ while (true) {
             $nroDocResponsableV = readline('Ingrese el numero de documento empleado del responsable del nuevo viaje: ');
             $numEmpleado = readline('Ingrese el numero de empleado del responsable del nuevo viaje: ');
             $numLicencia = readline('Ingrese el numero de licencia del responsable del nuevo viaje: ');
-            $nombreResponsableV = readline('Ingrese el Nombre del responsable del nuevo viaje: ');
+            $nombreResponsableV = readline('Ingrese el nombre del responsable del nuevo viaje: ');
             $apellidoResponsableV = readline('Ingrese el apellido del responsable del nuevo viaje: ');
             $nuevoResponsable = new ResponsableV();
             $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
@@ -43,7 +43,7 @@ while (true) {
 
             $codigo = readline('Ingrese el codigo del nuevo viaje: ');
             $destino = readline('Ingrese el destino del nuevo viaje: ');
-            $maxPasajeros = readline('Ingrese la cantidad maxima de pasajeros del nuevo viaje: ');
+            $maxPasajeros = readline('Ingrese la cantidad máxima de pasajeros del nuevo viaje: ');
             $costoDelViaje = readline('Ingrese el costo del viaje: ');
 
             $pasajerosArray = [];
@@ -56,18 +56,18 @@ while (true) {
             $viaje = new Viaje();
             if ($viaje->Buscar($idViaje)) {
                 echo "\nDesea modificar:\n";
-                echo "1. Modificar destino del viaje\n";
-                echo "2. Modificar maximo de pasajeros del viaje\n";
-                echo "3. Modificar responsable del viaje\n";
-                echo "4. Modificar costos del viaje\n";
-                echo "5. Modificar Empresa\n";
-                echo "6. Volver al menu anterior\n";
+                echo "1) Modificar destino del viaje\n";
+                echo "2) Modificar maximo de pasajeros del viaje\n";
+                echo "3) Modificar responsable del viaje\n";
+                echo "4) Modificar costos del viaje\n";
+                echo "5) Modificar Empresa\n";
+                echo "6) Volver al menu anterior\n";
                 $opcion = readline("Ingrese la opción deseada: ");
             }
 
             switch ($opcion) {
                 case '1':
-                    echo "Este es el Destino actual del viaje: " . $viaje->getVdestino() . "\n";
+                    echo "Este es el destino actual del viaje: " . $viaje->getVdestino() . "\n";
                     $viaje->setVdestino(readline("Ingrese el destino del viaje: "));
                     $viaje->modificar();
                     echo "Se cambió correctamente a " . $viaje->getVdestino() . "🟢";
@@ -85,11 +85,11 @@ while (true) {
 
                     if ($responsableV->Buscar($numDocResponsable) && $persona->Buscar($numDocResponsable)) {
                         echo "¿Qué información desea modificar del responsable del responsable?\n";
-                        echo "1- El número del responsable\n";
-                        echo "2- El número de licencia\n";
-                        echo "3- El nombre\n";
-                        echo "4- El apellido\n";
-                        echo "5- Todos los datos\n";
+                        echo "1) El número del responsable\n";
+                        echo "2) El número de licencia\n";
+                        echo "3) El nombre\n";
+                        echo "4) El apellido\n";
+                        echo "5) Todos los datos\n";
                         $eleccion = trim(fgets(STDIN));
                     }
                     switch ($eleccion) {
@@ -175,9 +175,9 @@ while (true) {
                     $empresa = new Empresa();
                     if ($empresa->Buscar($idEmpresa)) {
                         echo "Qué información desea modificar de la empresa?\n";
-                        echo "1- El nombre\n";
-                        echo "2- La dirección\n";
-                        echo "3- Todos los datos\n";
+                        echo "1) El nombre\n";
+                        echo "2) La dirección\n";
+                        echo "3) Todos los datos\n";
                         $opcion = readline("Ingrese la opción deseada: ");
                     }
                     switch ($opcion) {
@@ -215,7 +215,6 @@ while (true) {
                             break;
                     }
 
-
                 case '6':
                     echo "Regresando al menú principal...\n";
                     break;
@@ -223,7 +222,6 @@ while (true) {
                     echo "Opción inválida. Por favor, seleccione una opción válida.\n";
                     break;
             }
-
             break;
         case '3':
             echo "Ingrese el id del viaje\n";
@@ -239,10 +237,10 @@ while (true) {
             $pasajero->Buscar($numDocPasajero);
             if ($pasajero) {
                 echo "Qué dato quiere modificar?\n";
-                echo "1- Nombre\n";
-                echo "2- Apellido\n";
-                echo "3- Número de teléfono\n";
-                echo "4- Todos los datos \n";
+                echo "1) Nombre\n";
+                echo "2) Apellido\n";
+                echo "3) Número de teléfono\n";
+                echo "4) Todos los datos \n";
                 $eleccion = trim(fgets(STDIN));
                 switch ($eleccion) {
                     case 1:
@@ -322,14 +320,16 @@ while (true) {
                     echo "No hay más pasajes disponibles para la venta.\n";
                 }
             } else {
-                echo "Viaje no encontrado\n";
+                echo "Viaje no encontrado.\n";
             }
             break;
         case '6':
             echo "Que dato desea borrar?\n";
-            echo "Una vez que se elimina, no hay posibilidad de recuperar los datos. Manejar con cuidado.\n";
+            echo "IMPORTANTE! Una vez que se elimine no hay posibilidad de recuperar los datos. Manejar con cuidado.\n";
             echo "1) Eliminar viaje\n";
             echo "2) Eliminar empresa\n";
+            echo "3) Eliminar responsable del viaje\n";
+            echo "4) Eliminar pasajero\n";
             $rpta = trim(fgets(STDIN)) . "\n";
             switch ($rpta) {
                 case '1':
@@ -338,7 +338,7 @@ while (true) {
                     $viaje = new Viaje();
                     if ($viaje->Buscar($id)) {
                         if ($viaje->eliminar()) {
-                            echo "Todo ha sido eliminado\n";
+                            echo "Eliminado con éxito\n";
                         } else {
                             echo "Error al eliminar el viaje.\n";
                         }
@@ -352,12 +352,40 @@ while (true) {
                     $empresa = new Empresa();
                     if ($empresa->Buscar($idEMpresa)) {
                         if ($empresa->eliminar()) {
-                            echo "Todo ha sido eliminado\n";
+                            echo "Empresa eliminada con éxito.\n";
                         } else {
                             echo "Error al eliminar la empresa.\n";
                         }
                     } else {
-                        echo "Empresa no encontrada";
+                        echo "Empresa no encontrada\n";
+                    }
+                    break;
+                case '3':
+                    echo "Ingrese el número de documento del responsable:\n";
+                    $rdoc = trim(fgets(STDIN));
+                    $objRespV = new ResponsableV();
+                    if ($objRespV->Buscar($rdoc)) {
+                        if ($objRespV->eliminar()) {
+                            echo "Responsable eliminado con éxito.\n";
+                        } else {
+                            echo "Ocurrió un error al intentar borrar al responsable.\n";
+                        }
+                    } else {
+                        echo "No existe responsable con ese documento.\n";
+                    }
+                    break;
+                case '4':
+                    echo "Ingrese el documento del pasajero:\n";
+                    $pdoc = trim(fgets(STDIN));
+                    $objPasajero = new Pasajero();
+                    if ($objPasajero->Buscar($pdoc)) {
+                        if ($objPasajero->eliminar()) {
+                            echo "Pasajero eliminado con éxito.\n";
+                        } else {
+                            echo "Ocurrió un error al intentar borrar al pasajero.\n";
+                        }
+                    } else {
+                        echo "No se encontró un pasajero con ese documento en el viaje.\n";
                     }
                     break;
             }
