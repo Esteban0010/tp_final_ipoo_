@@ -59,7 +59,7 @@ class Pasajero extends Persona
             if ($base->Ejecutar($consultaPersona)) {
                 if ($row2 = $base->Registro()) {
                     parent::Buscar($dni);
-                    $this->setIdviaje($row2['idviaje']); // posble boolean
+                    $this->setIdviaje($row2['idviaje']); 
                     $this->setTelefono($row2['ptelefono']);
                     $resp = true;
                 }

@@ -305,6 +305,12 @@ while (true) {
             if ($viaje->Buscar($idViaje)) {
                 $viaje->getColPasajerosBD($idViaje);
                 $cantPasajeros = count($viaje->getColObjPasajeros());
+                $listP = $viaje->getColObjPasajeros();
+                $msj="";
+                foreach ($listP as  $value) {
+                    $msj .= $value;
+                }
+                echo $msj;
                 $capMax = $viaje->getVcantmaxpasajeros();
                 if ($capMax > $cantPasajeros) {
                     $nombre = readline('Nombre del pasajero: ');
