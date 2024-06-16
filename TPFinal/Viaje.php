@@ -24,7 +24,7 @@ class Viaje
 
     public function cargar($idCodviaje, $vdestino, $vcantmaxpasajeros, $objEmpresa, $objResponsableV, $vimporte)
     {
-        if($idCodviaje != null){
+        if ($idCodviaje != null) {
             $this->setCodIdviaje($idCodviaje);
         }
         $this->setVdestino($vdestino);
@@ -221,15 +221,14 @@ class Viaje
         $base = new BaseDatos();
         $resp = false;
         $empresa = $this->getObjEmpresa();
-        $rempleado= $this->getObjResponsableV();   
+        $rempleado = $this->getObjResponsableV();
         $consultaInsertar = $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES ('" . $this->getVdestino() . "', " . $this->getVcantmaxpasajeros() . ", " . $empresa->getIdempresa() . ", " . $rempleado->getRnumeroempleado() . ", " . $rempleado->getDoc() . ", " . $this->getVimporte() . ")";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
                 $resp = true;
-				$id=$base->devuelveIDInsercion($consultaInsertar);
-				$this->setCodIdviaje($id);
-
+                $id = $base->devuelveIDInsercion($consultaInsertar);
+                $this->setCodIdviaje($id);
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -258,6 +257,44 @@ class Viaje
             $this->setmensajeoperacion($base->getError());
         }
 
+        return $resp;
+    }
+
+    public function eliminarPasajerosPorViaje($idViaje)
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        if ($base->Iniciar()) {
+            $consultaBorraPasajeros = "DELETE FROM pasajero WHERE idviaje=" . $idViaje;
+            if ($base->Ejecutar($consultaBorraPasajeros)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $resp;
+    }
+
+    // si eliminamos el vijae, debemos eliminar los pasajeros
+    public function eliminar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $idViaje = $this->getCodIdviaje();
+        if ($this->eliminarPasajerosPorViaje($idViaje)) {
+            if ($base->Iniciar()) {
+                $consultaBorra = "DELETE FROM viaje WHERE idviaje=" . $idViaje;
+                if ($base->Ejecutar($consultaBorra)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
         return $resp;
     }
 
