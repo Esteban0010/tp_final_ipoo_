@@ -325,8 +325,42 @@ while (true) {
             }
             break;
         case '6':
-            echo "Saliendo del programa...\n";
-            exit;
+            echo "Que dato desea borrar?\n";
+            echo "Una vez que se elimina, no hay posibilidad de recuperar los datos. Manejar con cuidado.\n";
+            echo "1) Eliminar viaje\n";
+            echo "2) Eliminar empresa\n";
+            $rpta = trim(fgets(STDIN)) . "\n";
+            switch ($rpta) {
+                case '1':
+                    echo "Ingrese el ID del viaje a eliminar:\n";
+                    $id = trim(fgets(STDIN));
+                    $viaje = new Viaje();
+                    if ($viaje->Buscar($id)) {
+                        if ($viaje->eliminar()) {
+                            echo "Todo ha sido eliminado\n";
+                        } else {
+                            echo "Error al eliminar el viaje.\n";
+                        }
+                    } else {
+                        echo "Viaje no encontrado\n";
+                    }
+                    break;
+                case '2':
+                    echo "Ingrese el ID de la empresa:\n";
+                    $idEMpresa = trim(fgets(STDIN));
+                    $empresa = new Empresa();
+                    if ($empresa->Buscar($idEMpresa)) {
+                        if ($empresa->eliminar()) {
+                            echo "Todo ha sido eliminado\n";
+                        } else {
+                            echo "Error al eliminar la empresa.\n";
+                        }
+                    } else {
+                        echo "Empresa no encontrada";
+                    }
+                    break;
+            }
+            break;
         default:
             echo "Opción inválida. Por favor, seleccione una opción válida.\n";
             break;

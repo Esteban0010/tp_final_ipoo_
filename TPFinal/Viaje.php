@@ -255,6 +255,45 @@ class Viaje
         return $resp;
     }
 
+    public function eliminarPasajerosPorViaje($idViaje)
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        if ($base->Iniciar()) {
+            $consultaBorraPasajeros = "DELETE FROM pasajero WHERE idviaje=" . $idViaje;
+            if ($base->Ejecutar($consultaBorraPasajeros)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+        return $resp;
+    }
+
+    // si eliminamos el vijae, debemos eliminar los pasajeros
+    public function eliminar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $idViaje = $this->getCodIdviaje();
+        if ($this->eliminarPasajerosPorViaje($idViaje)) {
+            if ($base->Iniciar()) {
+                $consultaBorra = "DELETE FROM viaje WHERE idviaje=" . $idViaje;
+                if ($base->Ejecutar($consultaBorra)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
+        return $resp;
+    }
+
+
     // para mostrar todos los viajes
     public function mostrarViaje($idViaje)
     {
