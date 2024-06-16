@@ -1,7 +1,7 @@
 <?php
+
 class Persona
 {
-
     private $documento;
     private $nombre;
     private $apellido;
@@ -20,7 +20,6 @@ class Persona
         $this->setDoc($doc);
         $this->setNombre($nombre);
         $this->setApellido($apellido);
-
     }
 
     // getters
@@ -54,7 +53,6 @@ class Persona
     {
         $this->apellido = $apellido;
     }
-
 
     public function setmensajeoperacion($mensajeoperacion)
     {

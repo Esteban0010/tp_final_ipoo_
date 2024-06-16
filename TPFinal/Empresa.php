@@ -114,9 +114,6 @@ class Empresa
 		return $arrViaje;
 	}
 
-	
-	
-
 	public function insertar()
 	{
 		$base = new BaseDatos();
@@ -125,9 +122,6 @@ class Empresa
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {
 				$resp =  true;
-				$id=$base->devuelveIDInsercion($consultaInsertar);
-				$this->setIdempresa($id);
-				
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}

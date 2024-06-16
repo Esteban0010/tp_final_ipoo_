@@ -220,15 +220,11 @@ class Viaje
     {
         $base = new BaseDatos();
         $resp = false;
-        $empresa = $this->getObjEmpresa();
-        $rempleado = $this->getObjResponsableV();
-        $consultaInsertar = $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES ('" . $this->getVdestino() . "', " . $this->getVcantmaxpasajeros() . ", " . $empresa->getIdempresa() . ", " . $rempleado->getRnumeroempleado() . ", " . $rempleado->getDoc() . ", " . $this->getVimporte() . ")";
+        $consultaInsertar = $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES ('" . $this->getVdestino() . "', " . $this->getVcantmaxpasajeros() . ", " . $this->getObjEmpresa()->getIdempresa() . ", " . $this->getObjResponsableV()->getRnumeroempleado() . ", " . $this->getObjResponsableV()->getDoc() . ", " . $this->getVimporte() . ")";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
                 $resp = true;
-                $id = $base->devuelveIDInsercion($consultaInsertar);
-                $this->setCodIdviaje($id);
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -299,7 +295,7 @@ class Viaje
     }
 
     // para mostrar todos los viajes
-    public function mostrarViaje($idViaje)
+    /*public function mostrarViaje($idViaje)
     {
         $viajes = $this->listar("idviaje = " . $idViaje);
         if ($viajes != null) {
@@ -311,16 +307,16 @@ class Viaje
             $resultado = "Sin viajes";
         }
         return $resultado;
-    }
+    }*/
 
     public function __toString()
     {
         $msj = 'ID VIAJE: ' . $this->getCodIdviaje() . "\n";
         $msj .= 'Destino: ' . $this->getVdestino() . "\n";
         $msj .= 'Cantidad Maxima Pasajeros: ' . $this->getVcantmaxpasajeros() . "\n";
-        $msj .= 'ID EMPRESA: ' . $this->getObjEmpresa() . "\n";
-        $msj .= 'Numero Empleado: ' . $this->getObjResponsableV() . "\n";
-        $msj .= 'DNI responsable: ' . $this->getObjResponsableV() . "\n";
+        $msj .= 'ID EMPRESA: ' . $this->getObjEmpresa()->getIdempresa() . "\n";
+        $msj .= 'Numero Empleado: ' . $this->getObjResponsableV()->getRnumeroempleado()  . "\n";
+        $msj .= 'DNI responsable: ' . $this->getObjResponsableV()->getDoc() . "\n";
         $msj .= 'Importe del Viaje: ' . $this->getVimporte() . "\n";
         return $msj;
     }
