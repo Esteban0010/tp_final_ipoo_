@@ -14,6 +14,7 @@ while (true) {
     echo "3. Ver datos del viaje\n";
     echo "4. Modificar Pasajero\n";
     echo "5. Agregar Pasajero\n";
+    echo "6. Eliminar datos\n";
     echo "7. Salir\n";
     $opcion = readline('Ingrese la opción deseada: ');
 
