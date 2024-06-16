@@ -114,15 +114,20 @@ class Empresa
 		return $arrViaje;
 	}
 
+	
+	
+
 	public function insertar()
 	{
 		$base = new BaseDatos();
 		$resp = false;
-		$consultaInsertar = "INSERT INTO empresa(idempresa, enombre, edireccion) 
-				            VALUES (" . $this->getIdempresa() . ",'" . $this->getEnombre() . "','" . $this->getEdireccion() . "')";
+		$consultaInsertar = $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getEnombre() . "','" . $this->getEdireccion() . "')";
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {
 				$resp =  true;
+				$id=$base->devuelveIDInsercion($consultaInsertar);
+				$this->setIdempresa($id);
+				
 			} else {
 				$this->setmensajeoperacion($base->getError());
 			}

@@ -24,7 +24,9 @@ class Viaje
 
     public function cargar($idCodviaje, $vdestino, $vcantmaxpasajeros, $objEmpresa, $objResponsableV, $vimporte)
     {
-        $this->setCodIdviaje($idCodviaje);
+        if($idCodviaje != null){
+            $this->setCodIdviaje($idCodviaje);
+        }
         $this->setVdestino($vdestino);
         $this->setVcantmaxpasajeros($vcantmaxpasajeros);
         $this->setObjEmpresa($objEmpresa);
@@ -218,12 +220,16 @@ class Viaje
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaInsertar = 'INSERT INTO viaje(idviaje, vdestino, vcantmaxpasajeros,  idempresa, rdocumento, vimporte) 
-				VALUES (' . $this->getCodIdviaje() . ",'" . $this->getVdestino() . "','" . $this->getVcantmaxpasajeros() . "','" . $this->getObjEmpresa() . "','" . $this->getObjResponsableV() . "','" . $this->getVimporte() . "')";
+        $empresa = $this->getObjEmpresa();
+        $rempleado= $this->getObjResponsableV();   
+        $consultaInsertar = $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES ('" . $this->getVdestino() . "', " . $this->getVcantmaxpasajeros() . ", " . $empresa->getIdempresa() . ", " . $rempleado->getRnumeroempleado() . ", " . $rempleado->getDoc() . ", " . $this->getVimporte() . ")";
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
                 $resp = true;
+				$id=$base->devuelveIDInsercion($consultaInsertar);
+				$this->setCodIdviaje($id);
+
             } else {
                 $this->setmensajeoperacion($base->getError());
             }

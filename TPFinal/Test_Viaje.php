@@ -26,29 +26,30 @@ while (true) {
             } else {
                 $nombreEmpresa = readline('Ingrese el nombre de la empresa: ');
                 $direccionEmpresa = readline('Ingrese la dirección de la empresa: ');
-                $empresa->cargar($idEmpresa, $nombreEmpresa, $direccionEmpresa);
+                $empresa->cargar(null, $nombreEmpresa, $direccionEmpresa);
                 $empresa->insertar();
             }
 
-            $nroDocResponsableV = readline('Ingrese el numero de documento empleado del responsable del nuevo viaje: ');
-            $numEmpleado = readline('Ingrese el numero de empleado del responsable del nuevo viaje: ');
-            $numLicencia = readline('Ingrese el numero de licencia del responsable del nuevo viaje: ');
-            $nombreResponsableV = readline('Ingrese el Nombre del responsable del nuevo viaje: ');
-            $apellidoResponsableV = readline('Ingrese el apellido del responsable del nuevo viaje: ');
             $nuevoResponsable = new ResponsableV();
-            $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
-            $nuevoResponsable->insertar();
-            print_r($nuevoResponsable);
-
-            $codigo = readline('Ingrese el codigo del nuevo viaje: ');
+            $nroDocResponsableV = readline('Ingrese el numero de documento empleado del responsable del nuevo viaje: ');
+            if ($nuevoResponsable->Buscar($nroDocResponsableV)) {
+                echo 'Ah ingresado el un responsable ya existente.';
+            } else {
+                $numEmpleado = readline('Ingrese el numero de empleado del responsable del nuevo viaje: ');
+                $numLicencia = readline('Ingrese el numero de licencia del responsable del nuevo viaje: ');
+                $nombreResponsableV = readline('Ingrese el Nombre del responsable del nuevo viaje: ');
+                $apellidoResponsableV = readline('Ingrese el apellido del responsable del nuevo viaje: ');
+                $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
+                $nuevoResponsable->insertar();
+            }
             $destino = readline('Ingrese el destino del nuevo viaje: ');
             $maxPasajeros = readline('Ingrese la cantidad maxima de pasajeros del nuevo viaje: ');
             $costoDelViaje = readline('Ingrese el costo del viaje: ');
-
-            $pasajerosArray = [];
             $viaje = new Viaje();
-            $viaje->cargar($codigo, $destino, $maxPasajeros, $empresa, $nuevoResponsable, $costoDelViaje);
+            $viaje->cargar(null, $destino, $maxPasajeros,$empresa, $nuevoResponsable, $costoDelViaje);
             $viaje->insertar();
+            print_r($viaje);
+            
             break;
         case '2':
             $idViaje = readline("Ingrese el ID VIAJE que desea modificar: ");
@@ -167,7 +168,7 @@ while (true) {
                     echo "Este es el Costo actual del viaje: " . $viaje->getVimporte() . "\n";
                     $viaje->setVimporte(readline("Ingrese el nuevo costo del viaje: "));
                     $viaje->modificar();
-                    echo "Se cambió correctamente a " .  $viaje->getVimporte() . "🟢\n";
+                    echo "Se cambió correctamente a " . $viaje->getVimporte() . "🟢\n";
                     break;
                 case '5':
                     $idEmpresa = readline("Ingrese el ID EMPRESA: ");
