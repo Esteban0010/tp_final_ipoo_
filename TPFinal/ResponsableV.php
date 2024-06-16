@@ -150,9 +150,6 @@ class ResponsableV extends Persona
         return $resp;
     }
 
-
-
-
     public function __toString()
     {
         $msj = parent::__toString();
