@@ -143,27 +143,6 @@ class ResponsableV extends Persona
         return $resp;
     }
 
-
-    /*public function insertar()
-    {
-        $base = new BaseDatos();
-        $resp = false;
-        if (parent::insertar()) {
-            //  $consonsultaVerificacion = "SELECT * FROM responsable AS r WHERE idempresa  IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = r.idempresa) AND ( r.rnumeroempleado = " . $this->getRnumeroempleado() . " OR r.rnumerolicencia = " . $this->getRnumerolicencia() . ")) ";
-            $consultaInsertar = "INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (" . $this->getDoc() . ", " . $this->getRnumeroempleado() . ", " . $this->getIdempresa() . ", " . $this->getRnumerolicencia() . ")";
-            if ($base->Iniciar()) {
-                if ($base->Ejecutar($consultaInsertar)) {
-                    $resp = true;
-                } else {
-                    $this->setmensajeoperacion($base->getError());
-                }
-            } else {
-                $this->setmensajeoperacion($base->getError());
-            }
-        }
-        return $resp;
-    }*/
-
     public function modificar()
     {
         $resp = false;
