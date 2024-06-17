@@ -15,9 +15,11 @@ CREATE TABLE persona (
 CREATE TABLE responsable (
     rnumeroempleado bigint UNIQUE,
     rnumerolicencia bigint UNIQUE,
+    idempresa bigint,
     rdocumento int(15), 
     PRIMARY KEY (rdocumento),
-    FOREIGN KEY (rdocumento) REFERENCES persona (documento)
+    FOREIGN KEY (rdocumento) REFERENCES persona (documento),
+    FOREIGN KEY (idempresa) REFERENCES empresa (idempresa)
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE viaje (

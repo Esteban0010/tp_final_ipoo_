@@ -44,6 +44,17 @@ while (true) {
         case '2':
             echo "Para poder crear un viaje, la existencia de un Responsable a cargo es intrínseca.\n";
             echo "Corroboremos si hay empleados sin asignar....\n";
+            $empresa = new Empresa();
+            $idEmpresa = readline('Ingrese el id de la empresa: ');
+            while(!$empresa->Buscar($idEmpresa)){
+                echo "Empresa no encontrada.";
+                $idEmpresa = readline('Ingrese el id de la empresa: ');
+            }
+            $idempresa =$empresa->getIdempresa();
+            if ($empresa->Buscar($idEmpresa)) {
+                echo "Empresa encontrada : " . $empresa->getEnombre() ." Id: ".$idempresa ."\n";
+
+            }
             $nuevoResponsable = new ResponsableV();
             $responsablesSinViaje = $nuevoResponsable->listarSinAsignacion();
             if (empty($responsablesSinViaje)) {
@@ -54,11 +65,14 @@ while (true) {
                 // SI SE REPITEN ESTOS NUMEROS, MSJ ERROR
                 $nombreResponsableV = readline("Ingrese el nombre: ");
                 $apellidoResponsableV = readline("Ingrese el apellido: ");
-                $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
+                $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia,$idempresa);
+              
                 if ($nuevoResponsable->insertar()) {
+
                     echo "El responsable fue creado.\n";
                 } else {
                     echo "Ocurrió un error al crear al responsable" . $nuevoResponsable->getmensajeoperacion();
+                    $nuevoResponsable->cargar(null,null,null,null,null,null);
                 }
             } else {
                 echo "Se han encontrado responsables sin viajes asignados. Este es el listado:\n";
@@ -73,38 +87,48 @@ while (true) {
                     $nroDocResponsableV = readline("Ingrese el N° de documento: ");
                     $nombreResponsableV = readline("Ingrese el nombre: ");
                     $apellidoResponsableV = readline("Ingrese el apellido: ");
-                    $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia);
+                    $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia,$idempresa);
+                    echo $nuevoResponsable;
                     if ($nuevoResponsable->insertar()) {
                         echo "El responsable fue creado.\n";
-                    } else {
+                    } 
+                    else {
                         echo "Ocurrió un error al crear al responsable" . $nuevoResponsable->getmensajeoperacion();
+                        $nuevoResponsable->cargar(null,null,null,null,null,null);
                     }
                 } elseif (is_numeric($seleccionarResp) && $seleccionarResp > 0 && $seleccionarResp <= count($responsablesSinViaje)) {
                     $nuevoResponsable = $responsablesSinViaje[$seleccionarResp - 1];
                     echo "Perfecto, ha seleccionado a " . $nuevoResponsable->getNombre() . " " . $nuevoResponsable->getApellido() . " como responsable del viaje.\n";
                 } else {
-                    echo "Error en la respuesta, verifique que esté dentro del rango.\n";
+                    echo "\nError en la respuesta, verifique que esté dentro del rango.\n";
                 }
             }
-            echo "Ahora sí, puede crear un viaje.\n";
-            echo "Asigne el viaje a una empresa:\n";
-            $idEMpresa = readline("Ingrese el ID de la empresa: ");
-            $empresa = new Empresa();
-            if ($empresa->Buscar($idEMpresa)) {
-                $destino = readline('Ingrese el destino del nuevo viaje: ');
-                $maxPasajeros = readline('Ingrese la cantidad máxima de pasajeros del nuevo viaje: ');
-                $costoDelViaje = readline('Ingrese el costo del viaje: ');
-                $viaje = new Viaje();
-                $viaje->cargar(null, $destino, $maxPasajeros, $empresa, $nuevoResponsable, $costoDelViaje);
-                if ($viaje->insertar()) {
-                    echo "Viaje creado exitosamente.\n";
-                    echo "id viaje:". $viaje->getCodIdviaje();
+            $doc = $nuevoResponsable->getDoc();
+            echo $doc;
+            if($nuevoResponsable->Buscar($doc)){
+                echo "Ahora sí, puede crear un viaje.\n";
+                echo "Asigne el viaje a una empresa:\n";
+                if ($empresa->Buscar($idEmpresa) ) {
+                    $destino = readline('Ingrese el destino del nuevo viaje: ');
+                    $maxPasajeros = readline('Ingrese la cantidad máxima de pasajeros del nuevo viaje: ');
+                    $costoDelViaje = readline('Ingrese el costo del viaje: ');
+                    $viaje = new Viaje();
+                    $viaje->cargar(null, $destino, $maxPasajeros, $empresa, $nuevoResponsable, $costoDelViaje);
+                    if ($viaje->insertar()) {
+                        echo "Viaje creado exitosamente.\n";
+                        echo "id viaje:". $viaje->getCodIdviaje();
+                    } else {
+                        echo "Ocurrió un error: " . $viaje->getmensajeoperacion();
+                    }
                 } else {
-                    echo "Ocurrió un error: " . $viaje->getmensajeoperacion();
+                    echo "\nEl ID ya está asignado a una empresa o no existe.\n";
                 }
-            } else {
-                echo "El ID ya está asignado a una empresa o no existe.\n";
             }
+            else{
+                echo "\nOcurrio error al crear responsable No se pudo completar el Viaje.\n";
+            }
+
+            
             break;
         case '3':
             $idViaje = readline("Ingrese el ID VIAJE que desea modificar: ");
