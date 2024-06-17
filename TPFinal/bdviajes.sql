@@ -23,7 +23,7 @@ CREATE TABLE responsable (
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE viaje (
-    idviaje bigint AUTO_INCREMENT, /*codigo de viaje*/
+    idviaje bigint AUTO_INCREMENT,
     vdestino varchar(150),
     vcantmaxpasajeros int,
     idempresa bigint,

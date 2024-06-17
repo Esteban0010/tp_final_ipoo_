@@ -121,8 +121,8 @@ class Empresa
 		$consultaInsertar = $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getEnombre() . "','" . $this->getEdireccion() . "')";
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaInsertar)) {
-				$id=$base->lastInsertId();
-                $this->setIdempresa($id);
+				$id = $base->lastInsertId();
+				$this->setIdempresa($id);
 				$resp =  true;
 			} else {
 				$this->setmensajeoperacion($base->getError());
@@ -138,7 +138,7 @@ class Empresa
 		$resp = false;
 		$base = new BaseDatos();
 		$consultaModifica = "UPDATE empresa
-                            SET enombre='" . $this->getEnombre() . "',edireccion='" . $this->getEdireccion() . "' WHERE idempresa=" .  $this->getIdempresa();
+                             SET enombre='" . $this->getEnombre() . "',edireccion='" . $this->getEdireccion() . "' WHERE idempresa=" .  $this->getIdempresa();
 		if ($base->Iniciar()) {
 			if ($base->Ejecutar($consultaModifica)) {
 				$resp =  true;

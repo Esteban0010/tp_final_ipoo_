@@ -14,7 +14,7 @@ class ResponsableV extends Persona
         $this->idempresa = "";
     }
 
-    public function cargar($doc, $nombre, $apellido,  $rnumeroempleado = null, $rnumerolicencia = null,$idempresa = null)
+    public function cargar($doc, $nombre, $apellido,  $rnumeroempleado = null, $rnumerolicencia = null, $idempresa = null)
     {
         parent::cargar($doc, $nombre, $apellido);
         $this->setRnumeroempleado($rnumeroempleado);
@@ -23,12 +23,14 @@ class ResponsableV extends Persona
     }
 
 
-    public function getIdempresa(){
+    public function getIdempresa()
+    {
         return $this->idempresa;
     }
 
-    public function setIdempresa($idempresa){
-         $this->idempresa=$idempresa;
+    public function setIdempresa($idempresa)
+    {
+        $this->idempresa = $idempresa;
     }
     public function getRnumeroempleado()
     {
@@ -105,18 +107,31 @@ class ResponsableV extends Persona
         return $resp;
     }
 
+    public function verificacionNoRepetir()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $consultaVerificacion = "SELECT * FROM responsable WHERE (rnumeroempleado = " . $this->getRnumeroempleado() . " OR rnumerolicencia = " . $this->getRnumerolicencia() . ") AND idempresa = " . $this->getIdempresa();
+
+        if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
+            if ($base->Registro()) {
+                $resp = true;
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError()) . "\n";
+        }
+        return $resp;
+    }
+
     public function insertar()
     {
         $base = new BaseDatos();
         $resp = false;
-        if (parent::insertar()) {
-            //  $consonsultaVerificacion = "SELECT * FROM responsable AS r WHERE idempresa  IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = r.idempresa) AND ( r.rnumeroempleado = " . $this->getRnumeroempleado() . " OR r.rnumerolicencia = " . $this->getRnumerolicencia() . ")) ";
-            $consultaInsertar = "INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (" . $this->getDoc() . ", " . $this->getRnumeroempleado() . ", " . $this->getIdempresa() . ", " . $this->getRnumerolicencia() . ")";
-        
-            if ($base->Iniciar() ) {
-  
-
-                if ($base->Ejecutar($consultaInsertar)) {
+        if (!$this->verificacionNoRepetir()) {
+            if (parent::insertar()) {
+                $consultaInsertar = "INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (" . $this->getDoc() . ", " . $this->getRnumeroempleado() . ", " . $this->getIdempresa() . ", " . $this->getRnumerolicencia() . ")";
+                if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
                     $resp = true;
                 } else {
                     $this->setmensajeoperacion($base->getError());
@@ -127,6 +142,27 @@ class ResponsableV extends Persona
         }
         return $resp;
     }
+
+
+    /*public function insertar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        if (parent::insertar()) {
+            //  $consonsultaVerificacion = "SELECT * FROM responsable AS r WHERE idempresa  IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = r.idempresa) AND ( r.rnumeroempleado = " . $this->getRnumeroempleado() . " OR r.rnumerolicencia = " . $this->getRnumerolicencia() . ")) ";
+            $consultaInsertar = "INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (" . $this->getDoc() . ", " . $this->getRnumeroempleado() . ", " . $this->getIdempresa() . ", " . $this->getRnumerolicencia() . ")";
+            if ($base->Iniciar()) {
+                if ($base->Ejecutar($consultaInsertar)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
+        return $resp;
+    }*/
 
     public function modificar()
     {
