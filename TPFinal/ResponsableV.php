@@ -116,7 +116,6 @@ class ResponsableV extends Persona
         if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
             if ($base->Registro()) {
                 $resp = true;
-                $this->setmensajeoperacion($base->getError());
             }
         } else {
             $this->setmensajeoperacion($base->getError()) . "\n";
@@ -126,6 +125,7 @@ class ResponsableV extends Persona
 
     public function insertar()
     {
+
         $base = new BaseDatos();
         $resp = false;
         if (!$this->verificacionNoRepetir()) {
