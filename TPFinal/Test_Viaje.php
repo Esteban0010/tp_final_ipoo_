@@ -438,12 +438,17 @@ while (true) {
                     $apellido = readline('Apellido del pasajero: ');
                     $documento = readline('Número de documento del pasajero: ');
                     $telefono = readline('Teléfono del pasajero: ');
-                    $persona = new Persona();
-                    $persona->cargar($documento, $nombre, $apellido);
-                    $persona->insertar();
+                    // $persona = new Persona();
+                    // $persona->cargar($documento, $nombre, $apellido);
+                    // $persona->insertar();
                     $pasajero = new Pasajero();
                     $pasajero->cargar($documento, $nombre, $apellido, $idViaje, $telefono);
                     $pasajero->insertar();
+                    if( $pasajero->insertar()){
+                        echo "Pasajero cargado correctamente";
+                    }else{
+                        echo "ocurrio un error";
+                    }
                 } else {
                     echo "No hay más pasajes disponibles para la venta.\n";
                 }

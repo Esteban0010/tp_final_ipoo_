@@ -100,22 +100,40 @@ class Pasajero extends Persona
         return $arrayPersona;
     }
 
+
+    public function verificacionNoRepetir()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $consultaVerificacion = "SELECT * FROM pasajero AS psj WHERE psj.pdocumento = " . $this->getDoc() . "AND  idviaje = " . $this->getIdviaje();
+
+        if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
+            if ($base->Registro()) {
+                $resp = true;
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError()) . "\n";
+        }
+        return $resp;
+    }
+
     public function insertar()
     {
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = 'INSERT INTO pasajero(pdocumento,idviaje,ptelefono) 
 				            VALUES (' . $this->getDoc() . ",'" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                $resp = true;
+        if (!$this->verificacionNoRepetir()) {
+            if (parent::insertar()) {
+                if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
-        } else {
-            $this->setmensajeoperacion($base->getError());
         }
-
         return $resp;
     }
 
