@@ -67,7 +67,7 @@ class Persona
     public function Buscar($dni)
     {
         $base = new BaseDatos();
-        $consultaPersona = 'SELECT * FROM persona WHERE documento='.$dni;
+        $consultaPersona = 'SELECT * FROM persona WHERE documento=' . $dni;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaPersona)) {
@@ -93,7 +93,7 @@ class Persona
         $base = new BaseDatos();
         $consultaPersonas = 'SELECT * FROM persona ';
         if ($condicion != '') {
-            $consultaPersonas = $consultaPersonas.' WHERE '.$condicion;
+            $consultaPersonas = $consultaPersonas . ' WHERE ' . $condicion;
         }
         $consultaPersonas .= ' ORDER BY apellido ';
         if ($base->Iniciar()) {
@@ -121,14 +121,14 @@ class Persona
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaVerificacion = 'SELECT * FROM persona WHERE documento = '.$this->getDoc();
+        $consultaVerificacion = 'SELECT * FROM persona WHERE documento = ' . $this->getDoc();
 
         if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
             if ($base->Registro()) {
                 $resp = true;
             }
         } else {
-            $this->setmensajeoperacion($base->getError())."\n";
+            $this->setmensajeoperacion($base->getError()) . "\n";
         }
 
         return $resp;
@@ -139,7 +139,7 @@ class Persona
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = 'INSERT INTO persona(documento, apellido, nombre) 
-				            VALUES ('.$this->getDoc().",'".$this->getApellido()."','".$this->getNombre()."')";
+				            VALUES (' . $this->getDoc() . ",'" . $this->getApellido() . "','" . $this->getNombre() . "')";
         if ($this->verificarDatos() && !$this->verificacionNoRepetir()) {
             if ($base->Iniciar()) {
                 if ($base->Ejecutar($consultaInsertar)) {
@@ -151,7 +151,6 @@ class Persona
                 $this->setmensajeoperacion($base->getError());
             }
         }
-
         return $resp;
     }
 
@@ -159,7 +158,7 @@ class Persona
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE persona SET apellido='".$this->getApellido()."',nombre='".$this->getNombre()."' WHERE documento=".$this->getDoc();
+        $consultaModifica = "UPDATE persona SET apellido='" . $this->getApellido() . "',nombre='" . $this->getNombre() . "' WHERE documento=" . $this->getDoc();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -178,7 +177,7 @@ class Persona
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = 'DELETE FROM persona WHERE documento='.$this->getDoc();
+            $consultaBorra = 'DELETE FROM persona WHERE documento=' . $this->getDoc();
             if ($base->Ejecutar($consultaBorra)) {
                 $resp = true;
             } else {
@@ -204,9 +203,9 @@ class Persona
 
     public function __toString()
     {
-        $msj = 'Nombre: '.$this->getNombre()."\n";
-        $msj .= 'Apellido: '.$this->getApellido()."\n";
-        $msj .= 'Numero Documento: '.$this->getDoc()."\n";
+        $msj = 'Nombre: ' . $this->getNombre() . "\n";
+        $msj .= 'Apellido: ' . $this->getApellido() . "\n";
+        $msj .= 'Numero Documento: ' . $this->getDoc() . "\n";
 
         return $msj;
     }

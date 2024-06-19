@@ -150,7 +150,6 @@ class ResponsableV extends Persona
                 $this->setmensajeoperacion($base->getError());
             }
         }
-
         return $resp;
     }
 

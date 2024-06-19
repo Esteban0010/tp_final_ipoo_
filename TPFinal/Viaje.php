@@ -209,36 +209,6 @@ class Viaje
         return $arregloviaje;
     }
 
-    /*public function insertar()
-    {
-        $base = new BaseDatos();
-        $resp = false;
-
-        $consultaInsertar = "INSERT INTO viaje (vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES (
-        '" . $this->getVdestino() . "',
-        " . $this->getVcantmaxpasajeros() . ",
-        " . $this->getObjEmpresa()->getIdempresa() . ",
-        " . $this->getObjResponsableV()->getRnumeroempleado() . ",
-        " . $this->getObjResponsableV()->getDoc() . ",
-        " . $this->getVimporte() . "
-    )";
-
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                $id = $base->lastInsertId();
-                $this->setCodIdviaje($id);
-                $resp = true;
-            } else {
-                $this->setmensajeoperacion($base->getError());
-            }
-        } else {
-            $this->setmensajeoperacion($base->getError());
-        }
-
-        return $resp;
-    }*/
-
-
     public function insertar()
     {
         $base = new BaseDatos();
@@ -322,6 +292,7 @@ class Viaje
 
     public function cadena($array)
     {
+        $array = $this->getColObjPasajeros();
         $cadena = "";
         foreach ($array as $value) {
             $cadena .= $value;
@@ -331,6 +302,8 @@ class Viaje
 
     public function __toString()
     {
+        $col = $this->getColPasajerosBD($this->getCodIdviaje());
+
         $msj = "********************************************* \n";
         $msj .= 'ID VIAJE: ' . $this->getCodIdviaje() . "\n";
         $msj .= 'Destino: ' . $this->getVdestino() . "\n";
@@ -338,7 +311,7 @@ class Viaje
         $msj .= 'Cantidad Maxima Pasajeros: ' . $this->getVcantmaxpasajeros() . "\n";
         $msj .= "\nEmpresa: \n" . $this->getObjEmpresa() . "\n";
         $msj .= "Responsable: \n" . $this->getObjResponsableV() . "\n";
-        $msj .= "Pasajeros: \n" . $this->cadena($this->getColObjPasajeros()) . "\n";
+        $msj .= "Pasajeros: \n" . $this->cadena($col) . "\n";
         $msj .= "********************************************* \n";
         return $msj;
     }
