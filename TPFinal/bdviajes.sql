@@ -23,7 +23,7 @@ CREATE TABLE responsable (
     ON DELETE CASCADE,
     FOREIGN KEY (idempresa) REFERENCES empresa (idempresa)
     ON UPDATE CASCADE
-    ON DELETE CASCADE,
+    ON DELETE CASCADE
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE viaje (
