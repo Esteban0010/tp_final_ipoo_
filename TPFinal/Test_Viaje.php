@@ -26,84 +26,84 @@ while (true) {
             $idEmpresa = readline('Ingrese el id de la empresa: ');
             $empresa = new Empresa();
             if ($empresa->Buscar($idEmpresa)) {
-                echo "El id ingresado ya pertenece a una empresa.";
-                echo "Nombre de la empresa existente: " . $empresa->getEnombre() . "\n";
+                echo 'El id ingresado ya pertenece a una empresa.';
+                echo 'Nombre de la empresa existente: '.$empresa->getEnombre()."\n";
             } else {
                 echo "Perfecto! La empresa no existe. Puede creerla ahora.\n";
-                $nombreEmpresa = readline("Ingrese el nombre de la empresa: ");
-                $direccionEmpresa = readline("Ingrese la dirección de la empresa: ");
+                $nombreEmpresa = readline('Ingrese el nombre de la empresa: ');
+                $direccionEmpresa = readline('Ingrese la dirección de la empresa: ');
                 $empresa->cargar(null, $nombreEmpresa, $direccionEmpresa);
                 if ($empresa->insertar()) {
                     echo "Empresa creada con éxito.\n";
-                    echo "El ID otorgado es: " . $empresa->getIdempresa() . "\n";
+                    echo 'El ID otorgado es: '.$empresa->getIdempresa()."\n";
                 } else {
-                    echo "Ocurrió un error:" . $empresa->getmensajeoperacion() . "\n";
+                    echo 'Ocurrió un error:'.$empresa->getmensajeoperacion()."\n";
                 }
             }
             break;
         case '2':
             echo "Un viaje debe pertenecer a una empresa, por favor asigne el ID correspondiente\n";
             $empresa = new Empresa();
-            $idEmpresa = readline("Ingrese el id de la empresa: ");
+            $idEmpresa = readline('Ingrese el id de la empresa: ');
             while (!$empresa->Buscar($idEmpresa)) {
                 echo "Empresa no encontrada. Intente nuevamente\n";
-                $idEmpresa = readline("Ingrese el id de la empresa: ");
+                $idEmpresa = readline('Ingrese el id de la empresa: ');
             }
             $idempresa = $empresa->getIdempresa();
             if ($empresa->Buscar($idEmpresa)) {
-                echo "Empresa encontrada : " . $empresa->getEnombre() . " Id: " . $idempresa . "\n";
+                echo 'Empresa encontrada : '.$empresa->getEnombre().' Id: '.$idempresa."\n";
             }
             echo "Siguiente paso:\n";
             echo "Para poder crear un viaje, la existencia de un Responsable a cargo es intrínseca.\n";
             echo "Corroboremos si hay empleados sin asignar....\n";
             $nuevoResponsable = new ResponsableV();
-            $responsablesSinViaje = $nuevoResponsable->listarSinAsignacion();
+            $responsablesSinViaje = $nuevoResponsable->listarSinAsignacion($idEmpresa);
 
             if (empty($responsablesSinViaje)) {
                 echo "No existe ningún responsable sin asignar. Ingrese los datos correspondientes.\n";
 
                 $responsableCreado = false;
                 while (!$responsableCreado) {
-                    $numEmpleado = readline("Ingrese el N° de empleado: ");
-                    $numLicencia = readline("Ingrese el N° de licencia: ");
-                    $nroDocResponsableV = readline("Ingrese el N° de documento: ");
-                    $nombreResponsableV = readline("Ingrese el nombre: ");
-                    $apellidoResponsableV = readline("Ingrese el apellido: ");
+                    $numEmpleado = readline('Ingrese el N° de empleado: ');
+                    $numLicencia = readline('Ingrese el N° de licencia: ');
+                    $nroDocResponsableV = readline('Ingrese el N° de documento: ');
+                    $nombreResponsableV = readline('Ingrese el nombre: ');
+                    $apellidoResponsableV = readline('Ingrese el apellido: ');
                     $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia, $idEmpresa);
                     if ($nuevoResponsable->insertar()) {
                         echo "El responsable fue creado.\n";
                         $responsableCreado = true;
                     } else {
-                        echo "Ocurrió un error: " . $nuevoResponsable->getmensajeoperacion() . "\n";
+                        echo 'Ocurrió un error: '.$nuevoResponsable->getmensajeoperacion()."\n";
                         echo "Intente nuevamente con datos diferentes.\n";
                     }
                 }
             } else {
                 echo "Se han encontrado responsables sin viajes asignados. Este es el listado:\n";
                 foreach ($responsablesSinViaje as $i => $responsable) {
-                    echo ($i + 1) . ". " . $responsable->getNombre() . " " . $responsable->getApellido() . " | DNI: " . $responsable->getDoc() . "\n";
+                    echo($i + 1).'. '.$responsable->getNombre().' '.$responsable->getApellido().' | DNI: '.$responsable->getDoc()."\n";
                 }
                 $seleccionarResp = readline("Puede crear un nuevo responsable presionando 'x'. Si desea uno de la lista, seleccione el número correspondiente:\n");
-                if ($seleccionarResp == "x") {
+                if ($seleccionarResp == 'x') {
                     $responsableCreado = false;
                     while (!$responsableCreado) {
-                        $numEmpleado = readline("Ingrese el N° de empleado: ");
-                        $numLicencia = readline("Ingrese el N° de licencia: ");
-                        $nroDocResponsableV = readline("Ingrese el N° de documento: ");
-                        $nombreResponsableV = readline("Ingrese el nombre: ");
-                        $apellidoResponsableV = readline("Ingrese el apellido: ");
+                        $numEmpleado = readline('Ingrese el N° de empleado: ');
+                        $numLicencia = readline('Ingrese el N° de licencia: ');
+                        $nroDocResponsableV = readline('Ingrese el N° de documento: ');
+                        $nombreResponsableV = readline('Ingrese el nombre: ');
+                        $apellidoResponsableV = readline('Ingrese el apellido: ');
                         $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia, $idEmpresa);
                         if ($nuevoResponsable->insertar()) {
                             echo "El responsable fue creado.\n";
                             $responsableCreado = true;
                         } else {
-                            echo "Ocurrió un error: " . $nuevoResponsable->getmensajeoperacion() . "\n";
+                            echo 'Ocurrió un error: '.$nuevoResponsable->getmensajeoperacion()."\n";
                             echo "Intente nuevamente con datos diferentes.\n";
                         }
                     }
                 } elseif (is_numeric($seleccionarResp) && $seleccionarResp > 0 && $seleccionarResp <= count($responsablesSinViaje)) {
                     $nuevoResponsable = $responsablesSinViaje[$seleccionarResp - 1];
-                    echo "Perfecto, ha seleccionado a " . $nuevoResponsable->getNombre() . " " . $nuevoResponsable->getApellido() . " como responsable del viaje.\n";
+                    echo 'Perfecto, ha seleccionado a '.$nuevoResponsable->getNombre().' '.$nuevoResponsable->getApellido()." como responsable del viaje.\n";
                 } else {
                     echo "Error en la respuesta, verifique que esté dentro del rango.\n";
                     break;
@@ -171,9 +171,9 @@ while (true) {
                 $viaje->cargar(null, $destino, $maxPasajeros, $empresa, $nuevoResponsable, $costoDelViaje);
                 if ($viaje->insertar()) {
                     echo "Viaje creado exitosamente.\n";
-                    echo "id viaje:" . $viaje->getCodIdviaje();
+                    echo 'id viaje:'.$viaje->getCodIdviaje();
                 } else {
-                    echo "Ocurrió un error: " . $viaje->getmensajeoperacion();
+                    echo 'Ocurrió un error: '.$viaje->getmensajeoperacion();
                 }
             } else {
                 echo "\nEl ID ya está asignado a una empresa o no existe.\n";
@@ -181,7 +181,7 @@ while (true) {
 
             break;
         case '3':
-            $idViaje = readline("Ingrese el ID VIAJE que desea modificar: ");
+            $idViaje = readline('Ingrese el ID VIAJE que desea modificar: ');
             $viaje = new Viaje();
             if ($viaje->Buscar($idViaje)) {
                 echo "\nDesea modificar:\n";
@@ -191,20 +191,20 @@ while (true) {
                 echo "4) Modificar costos del viaje\n";
                 echo "5) Modificar Empresa\n";
                 echo "6) Volver al menu anterior\n";
-                $opcion = readline("Ingrese la opción deseada: ");
+                $opcion = readline('Ingrese la opción deseada: ');
 
                 switch ($opcion) {
                     case 1:
-                        echo "Este es el destino actual del viaje: " . $viaje->getVdestino() . "\n";
-                        $viaje->setVdestino(readline("Ingrese el destino del viaje: "));
+                        echo 'Este es el destino actual del viaje: '.$viaje->getVdestino()."\n";
+                        $viaje->setVdestino(readline('Ingrese el destino del viaje: '));
                         $viaje->modificar();
-                        echo "Se cambió correctamente a " . $viaje->getVdestino() . "🟢";
+                        echo 'Se cambió correctamente a '.$viaje->getVdestino().'🟢';
                         break;
                     case 2:
-                        echo "Esta es la cantidad maxima actual del viaje: " . $viaje->getVcantmaxpasajeros() . "\n";
-                        $viaje->setVcantmaxpasajeros(readline("Ingrese cantidad maxima de pasajeros del viaje: "));
+                        echo 'Esta es la cantidad maxima actual del viaje: '.$viaje->getVcantmaxpasajeros()."\n";
+                        $viaje->setVcantmaxpasajeros(readline('Ingrese cantidad maxima de pasajeros del viaje: '));
                         $viaje->modificar();
-                        echo "Se cambió correctamente a " . $viaje->getVcantmaxpasajeros() . "🟢";
+                        echo 'Se cambió correctamente a '.$viaje->getVcantmaxpasajeros().'🟢';
                         break;
                     case 3:
                         $numDocResponsable = readline("Ingrese el DNI del responsable al que desea cambiarle los datos:\n");
@@ -222,65 +222,65 @@ while (true) {
                         }
                         switch ($eleccion) {
                             case 1:
-                                echo $responsableV->getRnumeroempleado() . " es el número de responsable \n";
+                                echo $responsableV->getRnumeroempleado()." es el número de responsable \n";
                                 $persona->Buscar($numDocResponsable);
                                 echo "Se cambiará a: \n";
                                 $nuevoNumEmpleado = trim(fgets(STDIN));
                                 $responsableV->setRnumeroempleado($nuevoNumEmpleado);
                                 $responsableV->modificar();
-                                echo "Se cambió correctamente a " . $responsableV->getRnumeroempleado() . "🟢 \n";
+                                echo 'Se cambió correctamente a '.$responsableV->getRnumeroempleado()."🟢 \n";
                                 break;
                             case 2:
-                                echo $responsableV->getRnumerolicencia() . " es el numero de licencia del responsable \n";
+                                echo $responsableV->getRnumerolicencia()." es el numero de licencia del responsable \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoNumLicencia = trim(fgets(STDIN));
                                 $responsableV->setRnumerolicencia($nuevoNumLicencia);
                                 $responsableV->modificar();
-                                echo "Se cambió correctamente a " . $responsableV->getRnumerolicencia() . "🟢 \n";
+                                echo 'Se cambió correctamente a '.$responsableV->getRnumerolicencia()."🟢 \n";
                                 break;
 
                             case 3:
-                                echo $persona->getNombre() . " es el nombre del responsable \n";
+                                echo $persona->getNombre()." es el nombre del responsable \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoNombre = trim(fgets(STDIN));
                                 $persona->setNombre($nuevoNombre);
                                 $persona->modificar();
-                                echo "Se cambió correctamente a " . $persona->getNombre() . " 🟢 \n";
+                                echo 'Se cambió correctamente a '.$persona->getNombre()." 🟢 \n";
                                 break;
                             case 4:
-                                echo $persona->getApellido() . " es el apellido de empleado \n";
+                                echo $persona->getApellido()." es el apellido de empleado \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoApellido = trim(fgets(STDIN));
                                 $persona->setApellido($nuevoApellido);
                                 $persona->modificar();
-                                echo "Se cambió correctamente a " . $persona->getApellido() . "🟢\n";
+                                echo 'Se cambió correctamente a '.$persona->getApellido()."🟢\n";
                                 break;
                             case 5:
-                                echo $responsableV->getRnumeroempleado() . " es el número de responsable \n";
+                                echo $responsableV->getRnumeroempleado()." es el número de responsable \n";
                                 $persona->Buscar($numDocResponsable);
                                 echo "Se cambiará a: \n";
                                 $nuevoNumEmpleado = trim(fgets(STDIN));
                                 $responsableV->setRnumeroempleado($nuevoNumEmpleado);
                                 $responsableV->modificar();
-                                echo "Se cambió correctamente a " . $responsableV->getRnumeroempleado() . "🟢\n";
-                                echo $responsableV->getRnumerolicencia() . " es el numero de licencia del responsable \n";
+                                echo 'Se cambió correctamente a '.$responsableV->getRnumeroempleado()."🟢\n";
+                                echo $responsableV->getRnumerolicencia()." es el numero de licencia del responsable \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoNumLicencia = trim(fgets(STDIN));
                                 $responsableV->setRnumerolicencia($nuevoNumLicencia);
                                 $responsableV->modificar();
-                                echo "Se cambió correctamente a " . $responsableV->getRnumerolicencia() . "🟢\n";
-                                echo $persona->getNombre() . " es el nombre del responsable \n";
+                                echo 'Se cambió correctamente a '.$responsableV->getRnumerolicencia()."🟢\n";
+                                echo $persona->getNombre()." es el nombre del responsable \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoNombre = trim(fgets(STDIN));
                                 $persona->setNombre($nuevoNombre);
                                 $persona->modificar();
-                                echo "Se cambió correctamente a " . $persona->getNombre() . "🟢\n";
-                                echo $persona->getApellido() . " es el apellido de empleado \n";
+                                echo 'Se cambió correctamente a '.$persona->getNombre()."🟢\n";
+                                echo $persona->getApellido()." es el apellido de empleado \n";
                                 echo "Se cambiará a: \n";
                                 $nuevoApellido = trim(fgets(STDIN));
                                 $persona->setApellido($nuevoApellido);
                                 $persona->modificar();
-                                echo "Se cambió correctamente a " . $responsableV->getApellido() . "🟢\n";
+                                echo 'Se cambió correctamente a '.$responsableV->getApellido()."🟢\n";
                                 break;
                             default:
                                 echo "Opción incorrecta, por favor ingrese una opción válida🟢\n";
@@ -288,24 +288,24 @@ while (true) {
                         }
                         break;
                     case 4:
-                        echo "Este es el Costo actual del viaje: " . $viaje->getVimporte() . "\n";
-                        $viaje->setVimporte(readline("Ingrese el nuevo costo del viaje: "));
+                        echo 'Este es el Costo actual del viaje: '.$viaje->getVimporte()."\n";
+                        $viaje->setVimporte(readline('Ingrese el nuevo costo del viaje: '));
                         $viaje->modificar();
-                        echo "Se cambió correctamente a " . $viaje->getVimporte() . "🟢\n";
+                        echo 'Se cambió correctamente a '.$viaje->getVimporte()."🟢\n";
                         break;
                     case 5:
-                        $idEmpresa = readline("Ingrese el ID EMPRESA: ");
+                        $idEmpresa = readline('Ingrese el ID EMPRESA: ');
                         $empresa = new Empresa();
                         if ($empresa->Buscar($idEmpresa)) {
                             echo "Qué información desea modificar de la empresa?\n";
                             echo "1) El nombre\n";
                             echo "2) La dirección\n";
                             echo "3) Todos los datos\n";
-                            $opcion = readline("Ingrese la opción deseada: ");
+                            $opcion = readline('Ingrese la opción deseada: ');
                         }
                         switch ($opcion) {
                             case 1:
-                                echo "El nombre actual de la empresa es: " . $empresa->getEnombre() . "\n";
+                                echo 'El nombre actual de la empresa es: '.$empresa->getEnombre()."\n";
                                 echo "Se cambiará a :\n";
                                 $nuevoNombre = trim(fgets(STDIN));
                                 $empresa->setEnombre($nuevoNombre);
@@ -313,7 +313,7 @@ while (true) {
                                 echo "El nombre de la empresa se cambió correctamente 🟢\n";
                                 break;
                             case 2:
-                                echo "La dirección actual de la empresa es " . $empresa->getEdireccion() . "\n";
+                                echo 'La dirección actual de la empresa es '.$empresa->getEdireccion()."\n";
                                 echo "Se cambiará a :\n";
                                 $nuevaDire = trim(fgets(STDIN));
                                 $empresa->setEdireccion($nuevaDire);
@@ -321,13 +321,13 @@ while (true) {
                                 echo "La dirección de la empresa se cambió correctamente 🟢\n";
                                 break;
                             case 3:
-                                echo "El nombre actual de la empresa es " . $empresa->getEnombre() . "\n";
+                                echo 'El nombre actual de la empresa es '.$empresa->getEnombre()."\n";
                                 echo "Se cambiará a :\n";
                                 $nuevoNombre = trim(fgets(STDIN));
                                 $empresa->setEnombre($nuevoNombre);
                                 $empresa->modificar();
                                 echo "El nombre de la empresa se cambió correctamente 🟢\n";
-                                echo "La dirección actual de la empresa es " . $empresa->getEdireccion() . "\n";
+                                echo 'La dirección actual de la empresa es '.$empresa->getEdireccion()."\n";
                                 echo "Se cambiará a :\n";
                                 $nuevaDire = trim(fgets(STDIN));
                                 $empresa->setEdireccion($nuevaDire);
@@ -335,6 +335,7 @@ while (true) {
                                 $empresa->modificar();
                                 break;
                         }
+                        // no break
                     case 6:
                         echo "Regresando al menú principal\n";
                         break;
@@ -366,50 +367,50 @@ while (true) {
                 $eleccion = trim(fgets(STDIN));
                 switch ($eleccion) {
                     case 1:
-                        echo 'El nombre actual es: ' . $pasajero->getNombre() . "\n";
+                        echo 'El nombre actual es: '.$pasajero->getNombre()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoNombre = trim(fgets(STDIN));
                         $pasajero->setNombre($nuevoNombre);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getNombre() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getNombre()."\n";
                         break;
                     case 2:
-                        echo 'El apellido actual es: ' . $pasajero->getApellido() . "\n";
+                        echo 'El apellido actual es: '.$pasajero->getApellido()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoApellido = trim(fgets(STDIN));
                         $pasajero->setNombre($nuevoApellido);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getApellido() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getApellido()."\n";
                         break;
                     case 3:
-                        echo 'El teléfono actual es: ' . $pasajero->getTelefono() . "\n";
+                        echo 'El teléfono actual es: '.$pasajero->getTelefono()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoTelefono = trim(fgets(STDIN));
                         $pasajero->setTelefono($nuevoTelefono);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getTelefono() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getTelefono()."\n";
                         break;
                     case 4:
-                        echo 'El nombre actual es: ' . $pasajero->getNombre() . "\n";
+                        echo 'El nombre actual es: '.$pasajero->getNombre()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoNombre = trim(fgets(STDIN));
                         $pasajero->setNombre($nuevoNombre);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getNombre() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getNombre()."\n";
 
-                        echo 'El apellido actual es: ' . $pasajero->getApellido() . "\n";
+                        echo 'El apellido actual es: '.$pasajero->getApellido()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoApellido = trim(fgets(STDIN));
                         $pasajero->setNombre($nuevoApellido);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getApellido() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getApellido()."\n";
 
-                        echo 'El teléfono actual es: ' . $pasajero->getTelefono() . "\n";
+                        echo 'El teléfono actual es: '.$pasajero->getTelefono()."\n";
                         echo "Se cambiará a: \n";
                         $nuevoTelefono = trim(fgets(STDIN));
                         $pasajero->setTelefono($nuevoTelefono);
                         $pasajero->modificar();
-                        echo 'Se cambió correctamente a ' . $pasajero->getTelefono() . "\n";
+                        echo 'Se cambió correctamente a '.$pasajero->getTelefono()."\n";
                         break;
                     default:
                         echo "Opción incorrecta, por favor ingrese una opción válida\n";
@@ -444,10 +445,10 @@ while (true) {
                     $pasajero = new Pasajero();
                     $pasajero->cargar($documento, $nombre, $apellido, $idViaje, $telefono);
                     $pasajero->insertar();
-                    if( $pasajero->insertar()){
-                        echo "Pasajero cargado correctamente";
-                    }else{
-                        echo "ocurrio un error";
+                    if ($pasajero->insertar()) {
+                        echo 'Pasajero cargado correctamente';
+                    } else {
+                        echo 'ocurrio un error';
                     }
                 } else {
                     echo "No hay más pasajes disponibles para la venta.\n";
@@ -463,7 +464,7 @@ while (true) {
             echo "2) Eliminar empresa\n";
             echo "3) Eliminar responsable del viaje\n";
             echo "4) Eliminar pasajero\n";
-            $rpta = trim(fgets(STDIN)) . "\n";
+            $rpta = trim(fgets(STDIN))."\n";
             switch ($rpta) {
                 case '1':
                     echo "Ingrese el ID del viaje a eliminar:\n";
