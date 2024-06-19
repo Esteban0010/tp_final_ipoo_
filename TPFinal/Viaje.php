@@ -163,7 +163,7 @@ class Viaje
                     $objetoEmpresa = new Empresa();
                     $objetoEmpresa->Buscar($row2['idempresa']);
                     $objetoResponsable = new ResponsableV();
-                    $objetoResponsable->Buscar($row2['rnumeroempleado']);
+                    $objetoResponsable->Buscar($row2['rdocumento']);
                     $this->setCodIdviaje($id);
                     $this->setVdestino($row2['vdestino']);
                     $this->setVcantmaxpasajeros($row2['vcantmaxpasajeros']);
@@ -224,7 +224,7 @@ class Viaje
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaInsertar)) {
-                $id=$base->lastInsertId();
+                $id = $base->lastInsertId();
                 $this->setCodIdviaje($id);
                 $resp = true;
             } else {
@@ -312,15 +312,27 @@ class Viaje
         return $resultado;
     }*/
 
+
+    public function cadena($array)
+    {
+        $cadena = "";
+        foreach ($array as $value) {
+            $cadena .= $value;
+        }
+        return $cadena;
+    }
+
     public function __toString()
     {
-        $msj = 'ID VIAJE: ' . $this->getCodIdviaje() . "\n";
+        $msj = "********************************************* \n";
+        $msj .= 'ID VIAJE: ' . $this->getCodIdviaje() . "\n";
         $msj .= 'Destino: ' . $this->getVdestino() . "\n";
-        $msj .= 'Cantidad Maxima Pasajeros: ' . $this->getVcantmaxpasajeros() . "\n";
-        $msj .= 'ID EMPRESA: ' . $this->getObjEmpresa()->getIdempresa() . "\n";
-        $msj .= 'Numero Empleado: ' . $this->getObjResponsableV()->getRnumeroempleado()  . "\n";
-        $msj .= 'DNI responsable: ' . $this->getObjResponsableV()->getDoc() . "\n";
         $msj .= 'Importe del Viaje: ' . $this->getVimporte() . "\n";
+        $msj .= 'Cantidad Maxima Pasajeros: ' . $this->getVcantmaxpasajeros() . "\n";
+        $msj .= "\nEmpresa: \n" . $this->getObjEmpresa() . "\n";
+        $msj .= "Responsable: \n" . $this->getObjResponsableV() . "\n";
+        $msj .= "Pasajeros: \n" . $this->cadena($this->getColObjPasajeros()) . "\n";
+        $msj .= "********************************************* \n";
         return $msj;
     }
 }

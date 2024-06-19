@@ -170,9 +170,9 @@ class Empresa
 
 	public function __toString()
 	{
-		$msj = "ID Empresa: " . $this->getIdempresa() . "\n";
-		$msj .= "Nombre Empresa: " . $this->getEnombre() . "\n";
-		$msj .= "Dirección Empresa: " . $this->getEdireccion() . "\n";
+		$msj = "ID EMPRESA: " . $this->getIdempresa() . "\n";
+		$msj .= "Nombre : " . $this->getEnombre() . "\n";
+		$msj .= "Dirección : " . $this->getEdireccion() . "\n";
 		return  $msj;
 	}
 }
