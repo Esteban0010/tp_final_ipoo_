@@ -18,8 +18,12 @@ CREATE TABLE responsable (
     idempresa bigint,
     rdocumento int(15), 
     PRIMARY KEY (rdocumento),
-    FOREIGN KEY (rdocumento) REFERENCES persona (documento),
+    FOREIGN KEY (rdocumento) REFERENCES persona (documento)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     FOREIGN KEY (idempresa) REFERENCES empresa (idempresa)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE viaje (

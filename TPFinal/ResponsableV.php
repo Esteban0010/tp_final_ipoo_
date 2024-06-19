@@ -80,7 +80,7 @@ class ResponsableV extends Persona
         $base = new BaseDatos();
         $consulta = '
                     SELECT r.rdocumento, p.nombre, p.apellido, r.rnumeroempleado, r.rnumerolicencia
-                    FROM responsable r
+                    FROM responsable AS r
                     INNER JOIN persona p ON r.rdocumento = p.documento
                     LEFT JOIN viaje v ON r.rdocumento = v.rdocumento
                     WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = ' . $idEmpresa . ')';

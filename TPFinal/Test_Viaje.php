@@ -419,24 +419,34 @@ while (true) {
         case '6':
             echo "\nIngrese Id de viaje al que desea agregar pasajero:\n";
             $idViaje = trim(fgets(STDIN));
+
             $viaje = new Viaje();
             if ($viaje->Buscar($idViaje)) {
                 $viaje->getColPasajerosBD($idViaje);
                 $cantPasajeros = count($viaje->getColObjPasajeros());
-                $listP = $viaje->getColObjPasajeros();
                 $capMax = $viaje->getVcantmaxpasajeros();
+
                 if ($capMax > $cantPasajeros) {
                     $nombre = readline('Nombre del pasajero: ');
                     $apellido = readline('Apellido del pasajero: ');
                     $documento = readline('Número de documento del pasajero: ');
                     $telefono = readline('Teléfono del pasajero: ');
+
+                    $persona = new Persona();
+                    if (!$persona->Buscar($documento)) {
+                        $persona->cargar($documento, $nombre, $apellido);
+                        if (!$persona->insertar()) {
+                            echo "Error al agregar la persona.\n";
+                            exit; // romper
+                        }
+                    }
                     $pasajero = new Pasajero();
                     $pasajero->cargar($documento, $nombre, $apellido, $idViaje, $telefono);
-                    $pasajero->insertar();
+
                     if ($pasajero->insertar()) {
-                        echo 'ocurrio un error';
+                        echo "Pasajero cargado correctamente.\n";
                     } else {
-                        echo 'Pasajero cargado correctamente';
+                        echo "Ocurrió un error: Numero documento repetido o vacio\n";
                     }
                 } else {
                     echo "No hay más pasajes disponibles para la venta.\n";

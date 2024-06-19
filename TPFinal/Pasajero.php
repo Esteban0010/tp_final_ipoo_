@@ -100,7 +100,7 @@ class Pasajero extends Persona
         return $arrayPersona;
     }
 
-    public function verificacionNoRepetir()
+    /*public function verificacionNoRepetir()
     {
         $base = new BaseDatos();
         $resp = false;
@@ -113,9 +113,27 @@ class Pasajero extends Persona
             $this->setmensajeoperacion($base->getError()) . "\n";
         }
         return $resp;
+    }*/
+
+    public function verificacionNoRepetir()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $consultaVerificacion = 'SELECT * FROM pasajero WHERE pdocumento = ' . $this->getDoc();
+
+        if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
+            if ($base->Registro()) {
+                $resp = true;
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError()) . "\n";
+        }
+
+        return $resp;
     }
 
-    public function insertar()
+
+    /*public function insertar()
     {
         $base = new BaseDatos();
         $resp = false;
@@ -132,6 +150,24 @@ class Pasajero extends Persona
                 $this->setmensajeoperacion($base->getError());
             }
         }
+        return $resp;
+    }*/
+
+    public function insertar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        if (!$this->verificacionNoRepetir()) {
+            $consultaInsertar = "INSERT INTO pasajero (pdocumento, idviaje, ptelefono) 
+                                 VALUES ('" . $this->getDoc() . "', '" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
+
+            if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
+
         return $resp;
     }
 
