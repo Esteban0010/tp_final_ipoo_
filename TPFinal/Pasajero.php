@@ -118,13 +118,34 @@ class Pasajero extends Persona
         return $resp;
     }
 
-    public function insertar()
+    /*public function insertar()
     {
         $base = new BaseDatos();
         $resp = false;
         $consultaInsertar = "INSERT INTO pasajero (pdocumento, idviaje, ptelefono) 
                      VALUES ('" . $this->getDoc() . "', '" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
-        if ($this->verificarDatos() && !$this->verificacionNoRepetir()) {
+        if (!$this->verificacionNoRepetir()) {
+            if (parent::insertar()) {
+                if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
+                    $resp = true;
+                } else {
+                    $this->setmensajeoperacion($base->getError());
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        }
+
+        return $resp;
+    }*/
+
+    public function insertar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+        $consultaInsertar = "INSERT INTO pasajero (idviaje, ptelefono) 
+                     VALUES ('" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
+        if (!$this->verificacionNoRepetir()) {
             if (parent::insertar()) {
                 if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
                     $resp = true;
@@ -173,18 +194,6 @@ class Pasajero extends Persona
             }
         } else {
             $this->setmensajeoperacion($base->getError());
-        }
-
-        return $resp;
-    }
-
-    public function verificarDatos()
-    {
-        $resp = true;
-        $numTel = $this->getTelefono();
-        $idViaje = $this->getIdviaje();
-        if ($numTel != null && !is_numeric($idViaje) && $idViaje != null && !is_numeric($numTel)) {
-            $resp = false;
         }
 
         return $resp;

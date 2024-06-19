@@ -51,39 +51,67 @@ while (true) {
             }
             $idempresa = $empresa->getIdempresa();
             if ($empresa->Buscar($idEmpresa)) {
-                echo 'Empresa encontrada : ' . $empresa->getEnombre() . ' Id: ' . $idempresa . "\n";
+                echo 'Empresa encontrada : ' . $empresa->getEnombre() . ' ID: ' . $idempresa . "\n";
             }
             echo "Siguiente paso:\n";
             echo "Para poder crear un viaje, la existencia de un Responsable a cargo es intrínseca.\n";
             echo "Corroboremos si hay empleados sin asignar....\n";
             $nuevoResponsable = new ResponsableV();
-            $responsablesSinViaje = $nuevoResponsable->listarSinAsignacion($idEmpresa);
+            $responsablesSinViaje = $nuevoResponsable->listarR($idEmpresa);
 
             if (empty($responsablesSinViaje)) {
-                echo "No existe ningún responsable sin asignar. Ingrese los datos correspondientes.\n";
+                echo "No existe ningún responsable. Ingrese los datos correspondientes.\n";
 
                 $responsableCreado = false;
+
                 while (!$responsableCreado) {
-                    $numEmpleado = readline('Ingrese el N° de empleado: ');
-                    $numLicencia = readline('Ingrese el N° de licencia: ');
-                    $nroDocResponsableV = readline('Ingrese el N° de documento: ');
-                    $nombreResponsableV = readline('Ingrese el nombre: ');
-                    $apellidoResponsableV = readline('Ingrese el apellido: ');
+                    $numEmpleado = readline("Ingrese el N° de empleado: ");
+                    $numLicencia = readline("Ingrese el N° de licencia: ");
+                    $nroDocResponsableV = readline("Ingrese el N° de documento: ");
+                    $nombreResponsableV = readline("Ingrese el nombre: ");
+                    $apellidoResponsableV = readline("Ingrese el apellido: ");
+                    $valido = true;
+                    $mensajeError = "";
+                    if (!is_numeric($numEmpleado) || $numEmpleado <= 0 || $numEmpleado === "") {
+                        $mensajeError .= "El N° de empleado debe ser un numero, no debe contener letras o estar vacio.\n";
+                        $valido = false;
+                    }
+                    if (!is_numeric($numLicencia) || $numLicencia <= 0 || $numLicencia === "") {
+                        $mensajeError .= "El N° de licencia debe ser un numero.\n";
+                        $valido = false;
+                    }
+                    if (!is_numeric($nroDocResponsableV) || $nroDocResponsableV <= 0 || $nroDocResponsableV === "") {
+                        $mensajeError .= "El N° de documento debe ser un número positivo.\n";
+                        $valido = false;
+                    }
+                    if (!$valido) {
+                        echo $mensajeError;
+                        echo "Intente nuevamente.\n";
+                        continue; // la tuvimos que usar
+                    }
                     $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia, $idEmpresa);
-                    if ($nuevoResponsable->insertar()) {
-                        echo "El responsable fue creado.\n";
-                        $responsableCreado = true;
-                    } else {
-                        echo 'Ocurrió un error: ' . $nuevoResponsable->getmensajeoperacion() . "\n";
+
+                    if ($nuevoResponsable->verificacionNoRepetir()) {
+                        echo "Ocurrió un error: " . $nuevoResponsable->getmensajeoperacion() . "\n";
                         echo "Intente nuevamente con datos diferentes.\n";
+                    } else {
+                        if ($nuevoResponsable->insertar()) {
+                            echo "El responsable fue creado.\n";
+                            $responsableCreado = true;
+                        } else {
+                            echo 'Ocurrió un error: ' . $nuevoResponsable->getmensajeoperacion() . "\n";
+                            echo "Intente nuevamente con datos diferentes.\n";
+                        }
                     }
                 }
             } else {
                 echo "Se han encontrado responsables sin viajes asignados. Este es el listado:\n";
-                foreach ($responsablesSinViaje as $i => $responsable) {
-                    echo ($i + 1) . '. ' . $responsable->getNombre() . ' ' . $responsable->getApellido() . ' | DNI: ' . $responsable->getDoc() . "\n";
+                foreach ($responsablesSinViaje as $i => $responsablesLibres) {
+                    echo $i + 1 . ". " . $responsablesLibres->getNombre() . " " . $responsablesLibres->getApellido() . " | DNI:" . $responsablesLibres->getDoc() . "\n";
                 }
+
                 $seleccionarResp = readline("Puede crear un nuevo responsable presionando 'x'. Si desea uno de la lista, seleccione el número correspondiente:\n");
+
                 if ($seleccionarResp == 'x') {
                     $responsableCreado = false;
                     while (!$responsableCreado) {
@@ -92,13 +120,37 @@ while (true) {
                         $nroDocResponsableV = readline('Ingrese el N° de documento: ');
                         $nombreResponsableV = readline('Ingrese el nombre: ');
                         $apellidoResponsableV = readline('Ingrese el apellido: ');
+                        $valido = true;
+                        $mensajeError = "";
+                        if (!is_numeric($numEmpleado) || $numEmpleado <= 0 || $numEmpleado === "") {
+                            $mensajeError .= "El N° de empleado debe ser un numero, no debe contener letras o estar vacio.\n";
+                            $valido = false;
+                        }
+                        if (!is_numeric($numLicencia) || $numLicencia <= 0 || $numLicencia === "") {
+                            $mensajeError .= "El N° de licencia debe ser un numero, no debe contener letras o estar vacio.\n";
+                            $valido = false;
+                        }
+                        if (!is_numeric($nroDocResponsableV) || $nroDocResponsableV <= 0 || $nroDocResponsableV === "") {
+                            $mensajeError .= "El N° de documento debe ser un numero, no debe contener letras o estar vacio.\n";
+                            $valido = false;
+                        }
+                        if (!$valido) {
+                            echo $mensajeError;
+                            echo "Intente nuevamente.\n";
+                            continue; // la tuvimos que usar
+                        }
                         $nuevoResponsable->cargar($nroDocResponsableV, $nombreResponsableV, $apellidoResponsableV, $numEmpleado, $numLicencia, $idEmpresa);
-                        if ($nuevoResponsable->insertar()) {
-                            echo "El responsable fue creado.\n";
-                            $responsableCreado = true;
-                        } else {
-                            echo 'Ocurrió un error: ' . $nuevoResponsable->getmensajeoperacion() . "\n";
+                        if ($nuevoResponsable->verificacionNoRepetir()) {
+                            echo "Error! Verifique no estar repitiendo números ya existentes en la base de datos\n";
                             echo "Intente nuevamente con datos diferentes.\n";
+                        } else {
+                            if ($nuevoResponsable->insertar()) {
+                                echo "El responsable fue creado.\n";
+                                $responsableCreado = true;
+                            } else {
+                                echo "Ocurrió un error.\n";
+                                echo "Intente nuevamente con datos diferentes.\n";
+                            }
                         }
                     }
                 } elseif (is_numeric($seleccionarResp) && $seleccionarResp > 0 && $seleccionarResp <= count($responsablesSinViaje)) {
@@ -109,7 +161,6 @@ while (true) {
                     break;
                 }
             }
-
             echo "Ahora sí, puede crear un viaje.\n";
             echo "Asigne el viaje a una empresa:\n";
             if ($empresa->Buscar($idEmpresa)) {
@@ -127,7 +178,6 @@ while (true) {
             } else {
                 echo "\nEl ID ya está asignado a una empresa o no existe.\n";
             }
-
             break;
         case '3':
             $idViaje = readline('Ingrese el ID VIAJE que desea modificar: ');
@@ -141,7 +191,6 @@ while (true) {
                 echo "5) Modificar Empresa\n";
                 echo "6) Volver al menu anterior\n";
                 $opcion = readline('Ingrese la opción deseada: ');
-
                 switch ($opcion) {
                     case 1:
                         echo 'Este es el destino actual del viaje: ' . $viaje->getVdestino() . "\n";
@@ -159,7 +208,6 @@ while (true) {
                         $numDocResponsable = readline("Ingrese el DNI del responsable al que desea cambiarle los datos:\n");
                         $responsableV = new ResponsableV();
                         $persona = new Persona();
-
                         if ($responsableV->Buscar($numDocResponsable) && $persona->Buscar($numDocResponsable)) {
                             echo "¿Qué información desea modificar del responsable del responsable?\n";
                             echo "1) El número del responsable\n";
@@ -187,7 +235,6 @@ while (true) {
                                 $responsableV->modificar();
                                 echo 'Se cambió correctamente a ' . $responsableV->getRnumerolicencia() . "🟢 \n";
                                 break;
-
                             case 3:
                                 echo $persona->getNombre() . " es el nombre del responsable \n";
                                 echo "Se cambiará a: \n";
@@ -377,26 +424,16 @@ while (true) {
                 $viaje->getColPasajerosBD($idViaje);
                 $cantPasajeros = count($viaje->getColObjPasajeros());
                 $listP = $viaje->getColObjPasajeros();
-                /*$msj = "";
-                foreach ($listP as  $value) {
-                    $msj .= $value;
-                }*/
-                // echo $msj;
                 $capMax = $viaje->getVcantmaxpasajeros();
                 if ($capMax > $cantPasajeros) {
                     $nombre = readline('Nombre del pasajero: ');
                     $apellido = readline('Apellido del pasajero: ');
                     $documento = readline('Número de documento del pasajero: ');
                     $telefono = readline('Teléfono del pasajero: ');
-                    // $persona = new Persona();
-                    // $persona->cargar($documento, $nombre, $apellido);
-                    // $persona->insertar();
                     $pasajero = new Pasajero();
-                    // if ($documento <> $this->$nroDocResponsableV) {
+
                     $pasajero->cargar($documento, $nombre, $apellido, $idViaje, $telefono);
-                    // } else {
-                    //     echo  "Ingrese otro documento";
-                    // }
+
                     $pasajero->insertar();
                     if ($pasajero->insertar()) {
                         echo 'Pasajero cargado correctamente';

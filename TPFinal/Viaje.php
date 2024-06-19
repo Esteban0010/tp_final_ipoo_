@@ -145,13 +145,6 @@ class Viaje
         return $resp;
     }
 
-    /**
-     * Recupera los datos de un viaje por ID.
-     *
-     * @param int $id
-     *
-     * @return bool true en caso de encontrar los datos, false en caso contrario
-     */
     public function Buscar($id)
     {
         $base = new BaseDatos();
@@ -215,6 +208,36 @@ class Viaje
 
         return $arregloviaje;
     }
+
+    /*public function insertar()
+    {
+        $base = new BaseDatos();
+        $resp = false;
+
+        $consultaInsertar = "INSERT INTO viaje (vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES (
+        '" . $this->getVdestino() . "',
+        " . $this->getVcantmaxpasajeros() . ",
+        " . $this->getObjEmpresa()->getIdempresa() . ",
+        " . $this->getObjResponsableV()->getRnumeroempleado() . ",
+        " . $this->getObjResponsableV()->getDoc() . ",
+        " . $this->getVimporte() . "
+    )";
+
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($consultaInsertar)) {
+                $id = $base->lastInsertId();
+                $this->setCodIdviaje($id);
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $resp;
+    }*/
+
 
     public function insertar()
     {
@@ -296,22 +319,6 @@ class Viaje
         }
         return $resp;
     }
-
-    // para mostrar todos los viajes
-    /*public function mostrarViaje($idViaje)
-    {
-        $viajes = $this->listar("idviaje = " . $idViaje);
-        if ($viajes != null) {
-            $resultado = "";
-            foreach ($viajes as $viaje) {
-                $resultado .= $viaje->__toString() . "\n"; // acceder toString para retornar valor ensrguida
-            }
-        } else {
-            $resultado = "Sin viajes";
-        }
-        return $resultado;
-    }*/
-
 
     public function cadena($array)
     {

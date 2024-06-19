@@ -75,15 +75,15 @@ class ResponsableV extends Persona
         return $resp;
     }
 
-    public function listarSinAsignacion($idEmpresa)
+    public function listarR($idEmpresa)
     {
         $base = new BaseDatos();
         $consulta = '
-    SELECT r.rdocumento, p.nombre, p.apellido, r.rnumeroempleado, r.rnumerolicencia
-    FROM responsable r
-    INNER JOIN persona p ON r.rdocumento = p.documento
-    LEFT JOIN viaje v ON r.rdocumento = v.rdocumento
-    WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = ' . $idEmpresa . ')';
+                    SELECT r.rdocumento, p.nombre, p.apellido, r.rnumeroempleado, r.rnumerolicencia
+                    FROM responsable r
+                    INNER JOIN persona p ON r.rdocumento = p.documento
+                    LEFT JOIN viaje v ON r.rdocumento = v.rdocumento
+                    WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = ' . $idEmpresa . ')';
         $resp = [];
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consulta)) {
@@ -108,20 +108,29 @@ class ResponsableV extends Persona
         return $resp;
     }
 
+    /***
+     * nos tiene que tirar un false, si es false dps se puede agregar persona
+     * si tira true, no se puede agregar
+     */
     public function verificacionNoRepetir()
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaVerificacion = 'SELECT * FROM responsable WHERE (rnumeroempleado = ' . $this->getRnumeroempleado() . ' OR rnumerolicencia = ' . $this->getRnumerolicencia() . ') ';
 
-        if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
-            if ($base->Registro()) {
+        $consultaVerificacionResponsable = 'SELECT * FROM responsable WHERE (rnumeroempleado = ' . $this->getRnumeroempleado() . ' OR rnumerolicencia = ' . $this->getRnumerolicencia() . ') AND idempresa = ' . $this->getIdempresa();
+
+        $consultaVerificacionPersona = 'SELECT * FROM persona WHERE documento = ' . $this->getDoc();
+
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($consultaVerificacionResponsable) && $base->Registro()) {
+                $resp = true;
+            }
+            if ($base->Ejecutar($consultaVerificacionPersona) && $base->Registro()) {
                 $resp = true;
             }
         } else {
-            $this->setmensajeoperacion($base->getError()) . "\n";
+            $this->setmensajeoperacion($base->getError());
         }
-
         return $resp;
     }
 
@@ -129,7 +138,7 @@ class ResponsableV extends Persona
     {
         $base = new BaseDatos();
         $resp = false;
-        if ($this->verificarDatos() && !$this->verificacionNoRepetir()) {
+        if (!$this->verificacionNoRepetir()) {
             if (parent::insertar()) {
                 $consultaInsertar = 'INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (' . $this->getDoc() . ', ' . $this->getRnumeroempleado() . ', ' . $this->getIdempresa() . ', ' . $this->getRnumerolicencia() . ')';
                 if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
@@ -181,19 +190,6 @@ class ResponsableV extends Persona
             }
         } else {
             $this->setmensajeoperacion($base->getError());
-        }
-
-        return $resp;
-    }
-
-    public function verificarDatos()
-    {
-        $resp = false;
-        $numEmpl = $this->getRnumeroempleado();
-        $numLic = $this->getRnumerolicencia();
-        $idemp = $this->getIdempresa();
-        if ($numEmpl != null && !is_numeric($numEmpl) || $numLic != null && is_numeric($numLic) || $idemp != null && is_numeric($idemp)) {
-            $resp = true;
         }
 
         return $resp;
