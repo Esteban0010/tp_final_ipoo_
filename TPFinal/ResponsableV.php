@@ -3,7 +3,7 @@
 class ResponsableV extends Persona
 {
     private $rnumeroempleado;
-    private $idempresa;
+    private $objEmpresa;
     private $rnumerolicencia;
 
     public function __construct()
@@ -11,25 +11,25 @@ class ResponsableV extends Persona
         parent::__construct();
         $this->rnumeroempleado = '';
         $this->rnumerolicencia = '';
-        $this->idempresa = '';
+        $this->objEmpresa = '';
     }
 
-    public function cargar($doc, $nombre, $apellido, $rnumeroempleado = null, $rnumerolicencia = null, $idempresa = null)
+    public function cargar($doc, $nombre, $apellido, $rnumeroempleado = null, $rnumerolicencia = null, $objEmpresa = null)
     {
         parent::cargar($doc, $nombre, $apellido);
         $this->setRnumeroempleado($rnumeroempleado);
         $this->setRnumerolicencia($rnumerolicencia);
-        $this->setIdempresa($idempresa);
+        $this->setObjEmpresa($objEmpresa);
     }
 
-    public function getIdempresa()
+    public function getObjEmpresa()
     {
-        return $this->idempresa;
+        return $this->objEmpresa;
     }
 
-    public function setIdempresa($idempresa)
+    public function setObjEmpresa($objEmpresa)
     {
-        $this->idempresa = $idempresa;
+        $this->objEmpresa = $objEmpresa;
     }
 
     public function getRnumeroempleado()
@@ -55,15 +55,53 @@ class ResponsableV extends Persona
     public function Buscar($dni)
     {
         $base = new BaseDatos();
-        $consultaPersona = 'SELECT * FROM responsable WHERE rdocumento=' . $dni;
+        $consultaPersona = 'SELECT * FROM responsable WHERE rdocumento = '.$dni;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaPersona)) {
-                if ($row2 = $base->Registro()) {
-                    parent::Buscar($dni);
-                    $this->setRnumeroempleado($row2['rnumeroempleado']);
-                    $this->setRnumerolicencia($row2['rnumerolicencia']);
-                    $resp = true;
+                if (parent::Buscar($dni)) {
+                    if ($row2 = $base->Registro()) {
+                        // sa
+                        $this->setRnumeroempleado($row2['rnumeroempleado']);
+                        $this->setRnumerolicencia($row2['rnumerolicencia']);
+                        $empresa = new Empresa();
+                        $empresa->Buscar($row2['idempresa']);
+                        $this->setObjEmpresa($empresa);
+
+                        $resp = true;
+                    }
+                }
+            } else {
+                $this->setmensajeoperacion($base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion($base->getError());
+        }
+
+        return $resp;
+    }
+
+    public function BuscarEnViaje($condicion = '', $dni)
+    {
+        $base = new BaseDatos();
+        $consultaPersona = 'SELECT * FROM responsable';
+        $resp = false;
+        if ($condicion != '') {
+            $consultaPersona = $consultaPersona.' where '.$condicion;
+        }
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($consultaPersona)) {
+                if (parent::Buscar($dni)) {
+                    if ($row2 = $base->Registro()) {
+                        // sa
+                        $this->setRnumeroempleado($row2['rnumeroempleado']);
+                        $this->setRnumerolicencia($row2['rnumerolicencia']);
+                        $empresa = new Empresa();
+                        $empresa->Buscar($row2['idempresa']);
+                        $this->setObjEmpresa($empresa);
+
+                        $resp = true;
+                    }
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -79,27 +117,26 @@ class ResponsableV extends Persona
     {
         $base = new BaseDatos();
         $consulta = '
-                    SELECT r.rdocumento, p.nombre, p.apellido, r.rnumeroempleado, r.rnumerolicencia
+                    SELECT *
                     FROM responsable AS r
-                    INNER JOIN persona p ON r.rdocumento = p.documento
                     LEFT JOIN viaje v ON r.rdocumento = v.rdocumento
-                    WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = ' . $idEmpresa . ')';
+                    WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = '.$idEmpresa.')';
         $resp = [];
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consulta)) {
-                while ($row2 = $base->Registro()) {
-                    $responsable = new ResponsableV();
-                    $responsable->cargar(
-                        $row2['rdocumento'],
-                        $row2['nombre'],
-                        $row2['apellido'],
-                        $row2['rnumeroempleado'],
-                        $row2['rnumerolicencia']
-                    );
-                    $resp[] = $responsable;
+            if (parent::listar()) {
+                if ($base->Ejecutar($consulta)) {
+                    while ($row2 = $base->Registro()) {
+                        $responsable = new ResponsableV();
+                        $empresa = new Empresa();
+                        $this->setRnumeroempleado($row2['rnumeroempleado']);
+                        $this->setRnumerolicencia($row2['rnumerolicencia']);
+                        $empresa->Buscar($idEmpresa);
+                        $this->setObjEmpresa($empresa);
+                        $resp[] = $responsable;
+                    }
+                } else {
+                    $this->setmensajeoperacion($base->getError());
                 }
-            } else {
-                $this->setmensajeoperacion($base->getError());
             }
         } else {
             $this->setmensajeoperacion($base->getError());
@@ -117,9 +154,9 @@ class ResponsableV extends Persona
         $base = new BaseDatos();
         $resp = false;
 
-        $consultaVerificacionResponsable = 'SELECT * FROM responsable WHERE (rnumeroempleado = ' . $this->getRnumeroempleado() . ' OR rnumerolicencia = ' . $this->getRnumerolicencia() . ') AND idempresa = ' . $this->getIdempresa();
+        $consultaVerificacionResponsable = 'SELECT * FROM responsable WHERE (rnumeroempleado = '.$this->getRnumeroempleado().' OR rnumerolicencia = '.$this->getRnumerolicencia().') AND idempresa = '.$this->getObjEmpresa()->getIdempresa();
 
-        $consultaVerificacionPersona = 'SELECT * FROM persona WHERE documento = ' . $this->getDoc();
+        $consultaVerificacionPersona = 'SELECT * FROM persona WHERE documento = '.$this->getDoc();
 
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaVerificacionResponsable) && $base->Registro()) {
@@ -131,6 +168,7 @@ class ResponsableV extends Persona
         } else {
             $this->setmensajeoperacion($base->getError());
         }
+
         return $resp;
     }
 
@@ -140,7 +178,7 @@ class ResponsableV extends Persona
         $resp = false;
         if (!$this->verificacionNoRepetir()) {
             if (parent::insertar()) {
-                $consultaInsertar = 'INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES (' . $this->getDoc() . ', ' . $this->getRnumeroempleado() . ', ' . $this->getIdempresa() . ', ' . $this->getRnumerolicencia() . ')';
+                $consultaInsertar = 'INSERT INTO responsable (rdocumento, rnumeroempleado, idempresa, rnumerolicencia) VALUES ('.$this->getDoc().', '.$this->getRnumeroempleado().', '.$this->getObjEmpresa()->getIdempresa().', '.$this->getRnumerolicencia().')';
                 if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
                     $resp = true;
                 } else {
@@ -150,6 +188,7 @@ class ResponsableV extends Persona
                 $this->setmensajeoperacion($base->getError());
             }
         }
+
         return $resp;
     }
 
@@ -158,12 +197,14 @@ class ResponsableV extends Persona
         $resp = false;
         $base = new BaseDatos();
         $consultaModifica = "UPDATE responsable 
-                             SET rnumeroempleado='" . $this->getRnumeroempleado() . "', 
-                                 rnumerolicencia='" . $this->getRnumerolicencia() . "' 
-                             WHERE rdocumento='" . $this->getDoc() . "'";
+                             SET rnumeroempleado='".$this->getRnumeroempleado()."', 
+                                 rnumerolicencia='".$this->getRnumerolicencia()."' 
+                             WHERE rdocumento='".$this->getDoc()."'";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaModifica)) {
-                $resp = true;
+            if (parent::modificar()) {
+                if ($base->Ejecutar($consultaModifica)) {
+                    $resp = true;
+                }
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -179,9 +220,9 @@ class ResponsableV extends Persona
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = 'DELETE FROM responsable WHERE rdocumento=' . $this->getDoc();
-            if ($base->Ejecutar($consultaBorra)) {
-                if (parent::eliminar()) {
+            $consultaBorra = 'DELETE FROM responsable WHERE rdocumento='.$this->getDoc();
+            if (parent::eliminar()) {
+                if ($base->Ejecutar($consultaBorra)) {
                     $resp = true;
                 }
             } else {
@@ -197,8 +238,9 @@ class ResponsableV extends Persona
     public function __toString()
     {
         $msj = parent::__toString();
-        $msj .= "Número de Empleado: " . $this->getRnumeroempleado() . "\n";
-        $msj .= 'Numero de Licencia: ' . $this->getRnumerolicencia() . "\n";
+        $msj .= 'Número de Empleado: '.$this->getRnumeroempleado()."\n";
+        $msj .= 'Numero de Licencia: '.$this->getRnumerolicencia()."\n";
+        $msj .= 'Empresa: '.$this->getObjEmpresa();
 
         return $msj;
     }

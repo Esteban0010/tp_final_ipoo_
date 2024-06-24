@@ -53,15 +53,16 @@ class Pasajero extends Persona
     public function Buscar($dni)
     {
         $base = new BaseDatos();
-        $consultaPersona = 'SELECT * FROM pasajero WHERE pdocumento=' . $dni;
+        $consultaPersona = 'SELECT * FROM pasajero WHERE pdocumento='.$dni;
         $resp = false;
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaPersona)) {
-                if ($row2 = $base->Registro()) {
-                    parent::Buscar($dni);
-                    $this->setIdviaje($row2['idviaje']);
-                    $this->setTelefono($row2['ptelefono']);
-                    $resp = true;
+            if (parent::Buscar($dni)) {
+                if ($base->Ejecutar($consultaPersona)) {
+                    if ($row2 = $base->Registro()) {
+                        $this->setIdviaje($row2['idviaje']);
+                        $this->setTelefono($row2['ptelefono']);
+                        $resp = true;
+                    }
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -79,16 +80,18 @@ class Pasajero extends Persona
         $base = new BaseDatos();
         $consultaPersonas = 'SELECT * FROM pasajero ';
         if ($condicion != '') {
-            $consultaPersonas = $consultaPersonas . ' WHERE ' . $condicion;
+            $consultaPersonas = $consultaPersonas.' WHERE '.$condicion;
         }
         $consultaPersonas .= ' ORDER BY idviaje ';
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaPersonas)) {
-                $arrayPersona = [];
-                while ($row2 = $base->Registro()) {
-                    $obj = new Pasajero();
-                    $obj->Buscar($row2['pdocumento']);
-                    array_push($arrayPersona, $obj);
+            if (parent::listar()) {
+                if ($base->Ejecutar($consultaPersonas)) {
+                    $arrayPersona = [];
+                    while ($row2 = $base->Registro()) {
+                        $obj = new Pasajero();
+                        $obj->Buscar($row2['pdocumento']);
+                        array_push($arrayPersona, $obj);
+                    }
                 }
             } else {
                 $this->setmensajeoperacion($base->getError());
@@ -119,25 +122,24 @@ class Pasajero extends Persona
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaVerificacion = 'SELECT * FROM pasajero WHERE pdocumento = ' . $this->getDoc();
+        $consultaVerificacion = 'SELECT * FROM pasajero WHERE pdocumento = '.$this->getDoc();
 
         if ($base->Iniciar() && $base->Ejecutar($consultaVerificacion)) {
             if ($base->Registro()) {
                 $resp = true;
             }
         } else {
-            $this->setmensajeoperacion($base->getError()) . "\n";
+            $this->setmensajeoperacion($base->getError())."\n";
         }
 
         return $resp;
     }
 
-
     /*public function insertar()
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaInsertar = "INSERT INTO pasajero (pdocumento, idviaje, ptelefono) 
+        $consultaInsertar = "INSERT INTO pasajero (pdocumento, idviaje, ptelefono)
                      VALUES ('" . $this->getDoc() . "', '" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
         if (!$this->verificacionNoRepetir()) {
             if (parent::insertar()) {
@@ -158,11 +160,15 @@ class Pasajero extends Persona
         $base = new BaseDatos();
         $resp = false;
         if (!$this->verificacionNoRepetir()) {
-            $consultaInsertar = "INSERT INTO pasajero (pdocumento, idviaje, ptelefono) 
-                                 VALUES ('" . $this->getDoc() . "', '" . $this->getIdviaje() . "', '" . $this->getTelefono() . "')";
+            $consultaInsertar = 'INSERT INTO pasajero (pdocumento, idviaje, ptelefono) 
+                                 VALUES ('.$this->getDoc().', '.$this->getIdviaje().', '.$this->getTelefono().')';
 
-            if ($base->Iniciar() && $base->Ejecutar($consultaInsertar)) {
-                $resp = true;
+            if ($base->Iniciar()) {
+                if (parent::insertar()) {
+                    if ($base->Ejecutar($consultaInsertar)) {
+                        $resp = true;
+                    }
+                }
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -175,7 +181,7 @@ class Pasajero extends Persona
     {
         $resp = false;
         $base = new BaseDatos();
-        $consultaModifica = "UPDATE pasajero SET idviaje='" . $this->getIdviaje() . "', ptelefono='" . $this->getTelefono() . "' WHERE pdocumento=" . $this->getDoc();
+        $consultaModifica = "UPDATE pasajero SET idviaje='".$this->getIdviaje()."', ptelefono='".$this->getTelefono()."' WHERE pdocumento=".$this->getDoc();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 parent::modificar();
@@ -195,7 +201,7 @@ class Pasajero extends Persona
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = 'DELETE FROM pasajero WHERE pdocumento=' . $this->getDoc();
+            $consultaBorra = 'DELETE FROM pasajero WHERE pdocumento='.$this->getDoc();
             if ($base->Ejecutar($consultaBorra)) {
                 if (parent::eliminar()) {
                     $resp = true;
@@ -213,7 +219,8 @@ class Pasajero extends Persona
     public function __toString()
     {
         $msj = parent::__toString();
-        $msj .= 'id Viaje: ' . $this->getIdviaje() . "\n";
+        $msj .= 'id Viaje: '.$this->getIdviaje()."\n";
+        $msj .= 'Telefono: '.$this->getTelefono();
 
         return $msj;
     }
