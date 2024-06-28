@@ -244,7 +244,7 @@ class Viaje
         $numEmpleado = $this->getObjResponsableV()->getRnumeroempleado();
         $importe = $this->getVimporte();
 
-        $consultaInsertar = "INSERT INTO viaje(vdestino, vmaxpasajeros, idempresa, rnumeroempleado, vimporte) VALUES ('{$destino}','{$cantMaxPasajeros}','{$idEmpresa}','{$numEmpleado}','{$importe}')";
+        $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, vimporte) VALUES ('{$destino}','{$cantMaxPasajeros}','{$idEmpresa}','{$numEmpleado}','{$importe}')";
 
 
         if ($base->Iniciar()) {

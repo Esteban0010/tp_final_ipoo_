@@ -128,10 +128,13 @@ class ResponsableV extends Persona
                     while ($row2 = $base->Registro()) {
                         $responsable = new ResponsableV();
                         $empresa = new Empresa();
-                        $responsable = $this->setRnumeroempleado($row2['rnumeroempleado']);
-                        $responsable = $this->setRnumerolicencia($row2['rnumerolicencia']);
-                        $empresa->Buscar($idEmpresa);
-                        $responsable = $this->setObjEmpresa($empresa);
+                        // Asumiendo que los métodos set no devuelven un valor
+                        $responsable->setRnumeroempleado($row2['rnumeroempleado']);
+                        $responsable->setRnumerolicencia($row2['rnumerolicencia']);
+                        if ($empresa->Buscar($idEmpresa)) {
+                            $responsable->setObjEmpresa($empresa);
+                        }
+                        $responsable->cargar($row2['rnumeroempleado'], $row2['rnumerolicencia'], $empresa);
                         $resp[] = $responsable;
                     }
                 } else {
