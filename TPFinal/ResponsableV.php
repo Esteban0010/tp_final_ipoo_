@@ -113,39 +113,30 @@ class ResponsableV extends Persona
         return $resp;
     }
 
-    public function listarR($idEmpresa)
+    public function listar($condicion = "")
     {
+        $array = null;
         $base = new BaseDatos();
-        $consulta = '
-                    SELECT *
-                    FROM responsable AS r
-                    LEFT JOIN viaje v ON r.rdocumento = v.rdocumento
-                    WHERE v.rdocumento IS NULL AND r.idempresa IN (SELECT idempresa FROM empresa AS e WHERE e.idempresa = ' . $idEmpresa . ')';
-        $resp = [];
+        $consulta = "Select * from responsable ";
+        if ($condicion != "") {
+            $consulta = $consulta . ' where ' . $condicion;
+        }
+        $consulta .= " order by rnumeroempleado ";
         if ($base->Iniciar()) {
-            if (parent::listar()) {
-                if ($base->Ejecutar($consulta)) {
-                    while ($row2 = $base->Registro()) {
-                        $responsable = new ResponsableV();
-                        $empresa = new Empresa();
-                        // Asumiendo que los métodos set no devuelven un valor
-                        $responsable->setRnumeroempleado($row2['rnumeroempleado']);
-                        $responsable->setRnumerolicencia($row2['rnumerolicencia']);
-                        if ($empresa->Buscar($idEmpresa)) {
-                            $responsable->setObjEmpresa($empresa);
-                        }
-                        $responsable->cargar($row2['rnumeroempleado'], $row2['rnumerolicencia'], $empresa);
-                        $resp[] = $responsable;
-                    }
-                } else {
-                    $this->setmensajeoperacion($base->getError());
+            if ($base->Ejecutar($consulta)) {
+                $array = array();
+                while ($row2 = $base->Registro()) {
+                    $obj = new ResponsableV();
+                    $obj->Buscar($row2['rdocumento']);
+                    array_push($array, $obj);
                 }
+            } else {
+                $this->setmensajeoperacion($base->getError());
             }
         } else {
             $this->setmensajeoperacion($base->getError());
         }
-
-        return $resp;
+        return $array;
     }
 
     /***
