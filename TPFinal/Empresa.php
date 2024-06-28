@@ -118,12 +118,17 @@ class Empresa
     {
         $base = new BaseDatos();
         $resp = false;
-        $consultaInsertar = $consultaInsertar = "INSERT INTO empresa(enombre, edireccion) VALUES ('" . $this->getEnombre() . "','" . $this->getEdireccion() . "')";
+        $nombre = $this->getEnombre();
+        $direccion = $this->getEdireccion();
+
+        $consultaInsertar = "INSERT INTO empresa(enombre, edireccion)
+        VALUES ('{$nombre}', '{$direccion}')";
+
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                $id = $base->lastInsertId();
-                $this->setIdempresa($id);
-                $resp = true;
+
+            if ($idEmpresa = $base->devuelveIDInsercion($consultaInsertar)) {
+                $this->setIdempresa($idEmpresa);
+                $resp =  true;
             } else {
                 $this->setmensajeoperacion($base->getError());
             }

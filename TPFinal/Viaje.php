@@ -195,7 +195,7 @@ class Viaje
                     $numDoc = $row2['rdocumento'];
                     $Importe = $row2['vimporte'];
                     $empresa = new Empresa();
-                    $empresa->Buscar($idEmpresa);
+                    $empresa->Buscar($IdEmpresa);
                     $responsable = new ResponsableV();
                     $responsable->Buscar($numDoc);
                     $viaje = new viaje();
@@ -240,7 +240,7 @@ class Viaje
 
         $destino = $this->getCodIdviaje();
         $cantMaxPasajeros = $this->getVcantmaxpasajeros();
-        $idEmpresa = $this->getObjEmpresa()->getId();
+        $idEmpresa = $this->getObjEmpresa()->getIdempresa();
         $numEmpleado = $this->getObjResponsableV()->getRnumeroempleado();
         $importe = $this->getVimporte();
 
