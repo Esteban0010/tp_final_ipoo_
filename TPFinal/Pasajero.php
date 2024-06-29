@@ -144,6 +144,9 @@ class Pasajero extends Persona
         return $resp;
     }
 
+    /**
+     * A considerar la herencia a futuro, considerando a la clase padre en la consulta
+     */
     public function modificar()
     {
         $resp = false;

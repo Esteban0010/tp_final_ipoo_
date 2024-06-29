@@ -114,6 +114,11 @@ class Viaje
         $this->mensajeoperacion = $mensajeoperacion;
     }
 
+
+    /**
+     * Corregido por la profe María Laura Pino, el método es simil al listar(), con el error de que se rompió el encapsulamiento
+     * al utilizar INNER JOIN. Forma adecuada pero por fuera de la materia, pudimos entenderlo en la defensa oral.
+     */
     public function getColPasajerosBD($id)
     {
         $base = new BaseDatos();
@@ -211,27 +216,6 @@ class Viaje
 
         return $arregloviaje;
     }
-
-    /*public function insertar()
-    {
-        $base = new BaseDatos();
-        $resp = false;
-        $consultaInsertar = $consultaInsertar = "INSERT INTO viaje(vdestino, vcantmaxpasajeros, idempresa, rnumeroempleado, rdocumento, vimporte) VALUES ('".$this->getVdestino()."', ".$this->getVcantmaxpasajeros().', '.$this->getObjEmpresa()->getIdempresa().', '.$this->getObjResponsableV()->getRnumeroempleado().', '.$this->getObjResponsableV()->getDoc().', '.$this->getVimporte().')';
-
-        if ($base->Iniciar()) {
-            if ($base->Ejecutar($consultaInsertar)) {
-                $id = $base->lastInsertId();
-                $this->setCodIdviaje($id);
-                $resp = true;
-            } else {
-                $this->setmensajeoperacion($base->getError());
-            }
-        } else {
-            $this->setmensajeoperacion($base->getError());
-        }
-
-        return $resp;
-    }*/
 
     public function insertar()
     {
