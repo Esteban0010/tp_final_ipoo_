@@ -66,7 +66,7 @@ class Empresa
     public function Buscar($idempresa)
     {
         $base = new BaseDatos();
-        $consultaViaje = 'SELECT * FROM empresa WHERE idempresa = ' . $idempresa;
+        $consultaViaje = 'SELECT * FROM empresa WHERE idempresa = '.$idempresa;
         $resp = false;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaViaje)) {
@@ -90,7 +90,7 @@ class Empresa
         $base = new BaseDatos();
         $consultaViajes = 'SELECT * FROM empresa ';
         if ($condicion != '') {
-            $consultaViajes = $consultaViajes . ' WHERE ' . $condicion;
+            $consultaViajes = $consultaViajes.' WHERE '.$condicion;
         }
         $consultaViajes .= ' ORDER BY idempresa ';
         if ($base->Iniciar()) {
@@ -125,10 +125,9 @@ class Empresa
         VALUES ('{$nombre}', '{$direccion}')";
 
         if ($base->Iniciar()) {
-
             if ($idEmpresa = $base->devuelveIDInsercion($consultaInsertar)) {
                 $this->setIdempresa($idEmpresa);
-                $resp =  true;
+                $resp = true;
             } else {
                 $this->setmensajeoperacion($base->getError());
             }
@@ -144,7 +143,7 @@ class Empresa
         $resp = false;
         $base = new BaseDatos();
         $consultaModifica = "UPDATE empresa
-                             SET enombre='" . $this->getEnombre() . "',edireccion='" . $this->getEdireccion() . "' WHERE idempresa=" . $this->getIdempresa();
+                             SET enombre='".$this->getEnombre()."',edireccion='".$this->getEdireccion()."' WHERE idempresa=".$this->getIdempresa();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($consultaModifica)) {
                 $resp = true;
@@ -163,7 +162,7 @@ class Empresa
         $base = new BaseDatos();
         $resp = false;
         if ($base->Iniciar()) {
-            $consultaBorra = 'DELETE FROM empresa WHERE idempresa=' . $this->getIdempresa();
+            $consultaBorra = 'DELETE FROM empresa WHERE idempresa='.$this->getIdempresa();
             if ($base->Ejecutar($consultaBorra)) {
                 $resp = true;
             } else {
@@ -178,9 +177,9 @@ class Empresa
 
     public function __toString()
     {
-        $msj = 'ID EMPRESA: ' . $this->getIdempresa() . "\n";
-        $msj .= 'Nombre : ' . $this->getEnombre() . "\n";
-        $msj .= 'Dirección : ' . $this->getEdireccion() . "\n";
+        $msj = 'ID EMPRESA: '.$this->getIdempresa()."\n";
+        $msj .= 'Nombre : '.$this->getEnombre()."\n";
+        $msj .= 'Dirección : '.$this->getEdireccion()."\n";
 
         return $msj;
     }
